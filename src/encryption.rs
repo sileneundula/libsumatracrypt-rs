@@ -1,17 +1,31 @@
 use ecies_ed25519::*;
+
 use ecies_ed25519::{PublicKey,SecretKey};
 use bs58::*;
 use hex::*;
+use schnorrkel::derive;
+use zeroize::*;
 
 pub struct SumatraEncrypt;
 
+#[derive(Zeroize, ZeroizeOnDrop)]
+pub struct ECIESPublicKey(String);
+
+#[derive(Zeroize, ZeroizeOnDrop)]
+pub struct ECIESSecretKey(String);
+
 impl SumatraEncrypt {
-    pub fn generate()  {
+    pub fn generate() -> (ECIESSecretKey,ECIESPublicKey)  {
         // CSPRNG from thread_rand()
         let mut csprng = rand::thread_rng();
         
         // Secret Key and Public Key
         let (sk,pk) = ecies_ed25519::generate_keypair(&mut csprng);
+
+        let secretkey = hex::encode_upper(sk.as_bytes());
+        let publickey = hex::encode_upper(pk.as_bytes());
+
+        return (ECIESSecretKey(secretkey),ECIESPublicKey(publickey))
     }
     /// Encrypt: Accepts an input the public key (in hexadecimal format) and the message as a string or as bytes
     pub fn encrypt<T: AsRef<str>, B: AsRef<[u8]>>(pk: T, message: B) {
