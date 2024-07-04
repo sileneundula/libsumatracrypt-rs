@@ -7,8 +7,11 @@ edition = "2021"
 
 [dependencies]
 #ecies = {version = "0.2.7", default-features=false, features = ["xchacha20"] }
+new-rand = {package = "rand", version="0.8.5"}
+
 rand = "0.7.3"
 ecies-ed25519 = "0.5.1"
+rsa = { version = "0.9.6", features = ["sha2"] }
 zeroize = "1.8.1"
 
 # Encoding

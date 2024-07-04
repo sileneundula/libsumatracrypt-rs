@@ -5,7 +5,7 @@ use tiny_keccak::{Shake, *};
 use hex::*;
 
 pub struct SumatraBlake3;
-pub struct SumatraBlake2;
+pub struct SumatraBlake2b;
 pub struct SumatraSha2;
 pub struct SumatraSha3;
 pub struct SumatraShake256;
@@ -17,7 +17,7 @@ impl SumatraBlake3 {
     }
 }
 
-impl SumatraBlake2 {
+impl SumatraBlake2b {
     pub fn new<T: AsRef<[u8]>>(bytes: T, key: T, digest_size: usize) -> String {
         if digest_size > 0usize && digest_size <= 64usize {
             let hash = blake2_rfc::blake2b::blake2b(digest_size, key.as_ref(), bytes.as_ref());
