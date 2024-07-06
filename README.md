@@ -5,7 +5,7 @@
 ## Encryption
 
 * ECIES-Curve25519 (Elliptic Curve) (Primary)
-* RSA4096
+* RSA4096 (OAEP) (with LF for privacy)
 
 ## Hash Functions
 
