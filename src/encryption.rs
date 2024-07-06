@@ -83,7 +83,7 @@ impl SumatraRSA4096 {
 
         let padding = Oaep::new::<Sha256>();
 
-        let encrypted = pk.0.encrypt(&mut rng, padding, data.as_ref()).expect("Failed To Encode Using RSA");
+        let encrypted = pk.decode_from_pem().encrypt(&mut rng, padding, data.as_ref()).expect("Failed To Encode Using RSA");
 
         return bs58::encode(encrypted).into_string();
     }
@@ -93,7 +93,7 @@ impl SumatraRSA4096 {
 
         let decrypted_bytes = bs58::decode(encrypted.as_ref()).into_vec().expect("Failed To Decode RSA Encrypted Data From Base58");
 
-        let dec_data = sk.0.decrypt(padding, &decrypted_bytes).expect("failed to decrypt");
+        let dec_data = sk.decode_from_pem().decrypt(padding, &decrypted_bytes).expect("failed to decrypt");
 
         return dec_data
     }
@@ -104,6 +104,12 @@ impl SumatraRSAPublicKey {
         &self.0;
     }
     pub fn decode_from_pem(&self) -> RsaPublicKey {
-        self.0
+        return RsaPublicKey::from_public_key_pem(&self.0).expect("Failed To Convert Public Key");
+    }
+}
+
+impl SumatraRSASecretKey {
+    pub fn decode_from_pem(&self) -> RsaPrivateKey {
+        return RsaPrivateKey::from_pkcs8_pem(&self.0).expect("Failed To Decoded Secret Key")
     }
 }
