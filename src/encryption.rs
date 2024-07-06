@@ -12,6 +12,7 @@ use zeroize::*;
 
 use new_rand::*;
 
+// Security Warning: Do not show what operating system is used for RSA
 
 pub struct SumatraRSA4096;
 
@@ -72,8 +73,8 @@ impl SumatraRSA4096 {
         let pub_key = RsaPublicKey::from(&priv_key);
 
 
-        let sk_pem = priv_key.to_pkcs8_pem(LineEnding::default()).expect("Failed To Encode RSA Secret Key From PKCS8");
-        let pk_pem = pub_key.to_public_key_pem(LineEnding::default()).expect("Failed To Encode RSA Pub from PKCS8");
+        let sk_pem = priv_key.to_pkcs8_pem(LineEnding::LF).expect("Failed To Encode RSA Secret Key From PKCS8");
+        let pk_pem = pub_key.to_public_key_pem(LineEnding::LF).expect("Failed To Encode RSA Pub from PKCS8");
         //rsa::pkcs8::EncodePrivateKey::to_pkcs8_pem(&self, line_ending)
 
         return (SumatraRSASecretKey(sk_pem.to_string()),SumatraRSAPublicKey(pk_pem))
