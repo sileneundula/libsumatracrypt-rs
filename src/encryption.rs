@@ -1,6 +1,7 @@
 use ecies_ed25519::*;
 use rsa::{Oaep, RsaPrivateKey, RsaPublicKey};
 use rsa::oaep::*;
+use rsa::pkcs8::*;
 
 use ecies_ed25519::{PublicKey,SecretKey};
 use bs58::*;
@@ -14,9 +15,11 @@ use new_rand::*;
 
 pub struct SumatraRSA4096;
 
-pub struct SumatraRSAPublicKey(RsaPublicKey);
+#[derive(Zeroize, ZeroizeOnDrop)]
+pub struct SumatraRSAPublicKey(String);
 
-pub struct SumatraRSASecretKey(RsaPrivateKey);
+#[derive(Zeroize, ZeroizeOnDrop)]
+pub struct SumatraRSASecretKey(String);
 
 pub struct SumatraEncryptECIES;
 
@@ -68,7 +71,12 @@ impl SumatraRSA4096 {
         let priv_key = RsaPrivateKey::new(&mut rng, bits).expect("failed to generate a key");
         let pub_key = RsaPublicKey::from(&priv_key);
 
-        return (SumatraRSASecretKey(priv_key),SumatraRSAPublicKey(pub_key))
+
+        let sk_pem = priv_key.to_pkcs8_pem(LineEnding::default()).expect("Failed To Encode RSA Secret Key From PKCS8");
+        let pk_pem = pub_key.to_public_key_pem(LineEnding::default()).expect("Failed To Encode RSA Pub from PKCS8");
+        //rsa::pkcs8::EncodePrivateKey::to_pkcs8_pem(&self, line_ending)
+
+        return (SumatraRSASecretKey(sk_pem.to_string()),SumatraRSAPublicKey(pk_pem))
     }
     pub fn encrypt<T: AsRef<[u8]>>(pk: SumatraRSAPublicKey, data: T) -> String {
         let mut rng = new_rand::thread_rng();
@@ -94,5 +102,8 @@ impl SumatraRSA4096 {
 impl SumatraRSAPublicKey {
     pub fn public_key(&self) {
         &self.0;
+    }
+    pub fn decode_from_pem(&self) -> RsaPublicKey {
+        self.0
     }
 }

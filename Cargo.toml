@@ -11,7 +11,7 @@ new-rand = {package = "rand", version="0.8.5"}
 
 rand = "0.7.3"
 ecies-ed25519 = "0.5.1"
-rsa = { version = "0.9.6", features = ["sha2"] }
+rsa = { version = "0.9.6", features = ["sha2","pem"] }
 zeroize = "1.8.1"
 
 # Encoding
