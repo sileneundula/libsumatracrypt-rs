@@ -454,6 +454,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4ec2a862134d2a7d32d7983ddcdd1c4923530833c9f2ea1a44fc5fa473989058"
 
 [[package]]
+name = "libsumatracrypt-rs"
+version = "0.1.0"
+dependencies = [
+ "base32",
+ "blake2-rfc",
+ "blake3",
+ "bs58",
+ "ecies-ed25519",
+ "hex",
+ "rand 0.7.3",
+ "rand 0.8.5",
+ "rsa",
+ "schnorrkel",
+ "sha2 0.10.8",
+ "tiny-keccak",
+ "zeroize",
+]
+
+[[package]]
 name = "merlin"
 version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -805,25 +824,6 @@ name = "subtle"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6bdef32e8150c2a081110b42772ffe7d7c9032b606bc226c8260fd97e0976601"
-
-[[package]]
-name = "sumatracrypt-rs"
-version = "0.1.0"
-dependencies = [
- "base32",
- "blake2-rfc",
- "blake3",
- "bs58",
- "ecies-ed25519",
- "hex",
- "rand 0.7.3",
- "rand 0.8.5",
- "rsa",
- "schnorrkel",
- "sha2 0.10.8",
- "tiny-keccak",
- "zeroize",
-]
 
 [[package]]
 name = "syn"
