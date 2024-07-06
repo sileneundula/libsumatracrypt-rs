@@ -1,12 +1,19 @@
 [package]
 name = "sumatracrypt-rs"
+authors = ["silene"]
 version = "0.1.0"
+description = "A Rust Library For Cryptography"
+keywords = ["crypto","cryptography","encryption","digest","signature"]
+categories = ["cryptography"]
+readme = "README.md"
+license = "Apache-2.0 OR MIT"
+homepage = "https://github.com/Silene0259/num-primes"
+
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-#ecies = {version = "0.2.7", default-features=false, features = ["xchacha20"] }
 new-rand = {package = "rand", version="0.8.5"}
 
 rand = "0.7.3"
