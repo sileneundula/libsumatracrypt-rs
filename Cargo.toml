@@ -21,6 +21,9 @@ ecies-ed25519 = "0.5.1"
 rsa = { version = "0.9.6", features = ["sha2","pem"] }
 zeroize = "1.8.1"
 
+# CSPRNG
+getrandom = "0.2.14"
+
 # Encoding
 base32 = "0.5.0"
 hex = "0.4.3"
@@ -34,3 +37,4 @@ tiny-keccak = { version = "2.0.2", features = ["sha3","shake"] }
 
 # Signature
 schnorrkel = "0.11.4"
+ed25519-dalek = "2.0.0-rc.3"
