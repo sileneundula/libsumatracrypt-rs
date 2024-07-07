@@ -17,6 +17,6 @@
 
 ## Digital Signatures
 
-* Schnorr (to-do)
+* Schnorr
 * ED25519
-* RSA4096
+* RSA4096 (to-do)
