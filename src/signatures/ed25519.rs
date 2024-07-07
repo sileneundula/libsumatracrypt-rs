@@ -1,5 +1,4 @@
 use crate::csprng::SumatraCSPRNG;
-use std::borrow::Cow;
 
 use rand::rngs::OsRng;
 use ed25519_dalek::SigningKey;
