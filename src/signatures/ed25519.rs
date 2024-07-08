@@ -55,6 +55,21 @@ impl ED25519SecretKey {
 }
 
 impl ED25519PublicKey {
+    pub fn new<T: AsRef<str>>(pk_hex: T) -> Self {
+        return Self(pk_hex.as_ref().to_string())
+    }
+    pub fn verify<T: AsRef<[u8]>>(&self, bytes: T, signature: ED25519Signature) -> bool {
+        let vk = self.decode_from_hex();
+        let sig = signature.decode_from_hex();
+        let is_valid = vk.verify_strict(bytes.as_ref(), &sig);
+
+        if is_valid.is_ok() {
+            return true
+        }
+        else {
+            return false
+        }
+    }
     pub fn decode_from_hex(&self) -> VerifyingKey {
         let mut bytes_array: [u8;32] = [0u8;32];
         
@@ -67,5 +82,19 @@ impl ED25519PublicKey {
         let vk = ed25519_dalek::VerifyingKey::from_bytes(&bytes_array).expect("Failed To Get Verifying Key From Bytes");
 
         return vk
+    }
+}
+
+impl ED25519Signature {
+    pub fn decode_from_hex(&self) -> ed25519_dalek::Signature {
+        let mut bytes_array: [u8;64] = [0u8;64];
+
+        let bytes = hex::decode(&self.0).expect("Failed To Decode Hex");
+
+        for i in 0..bytes.len() {
+            bytes_array[i] = bytes[i];
+        }
+
+        return ed25519_dalek::Signature::from_bytes(&bytes_array)
     }
 }
