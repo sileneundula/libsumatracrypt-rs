@@ -14,7 +14,7 @@ pub struct SchnorrAPI;
 #[derive(Debug,Clone,PartialEq,PartialOrd,Hash)]
 pub struct SchnorrPublicKey(String);
 /// Schnorr Secret Key (encoded in base32)
-#[derive(Debug,Clone,PartialEq,PartialOrd,Hash)]
+#[derive(Clone,PartialEq,PartialOrd,Hash)]
 pub struct SchnorrSecretKey(String);
 
 #[derive(Debug,Clone,PartialEq,PartialOrd,Hash)]

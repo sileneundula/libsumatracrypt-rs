@@ -5,11 +5,15 @@ use ed25519_dalek::SigningKey;
 use ed25519_dalek::Signature;
 use ed25519_dalek::*;
 
+use zeroize::*;
+
 pub struct SumatraED25519;
 
+#[derive(Zeroize, ZeroizeOnDrop)]
 pub struct ED25519PublicKey(String);
+#[derive(Zeroize, ZeroizeOnDrop)]
 pub struct ED25519SecretKey(String);
-
+#[derive(Zeroize, ZeroizeOnDrop)]
 pub struct ED25519Signature(String);
 
 impl SumatraED25519 {
@@ -44,5 +48,24 @@ impl ED25519SecretKey {
         }
 
         return SigningKey::from_bytes(&bytes_array)
+    }
+    pub fn to_public_key(&self) -> ED25519PublicKey {
+        return ED25519PublicKey(hex::encode_upper(self.decode_from_hex().verifying_key().as_bytes()));
+    }
+}
+
+impl ED25519PublicKey {
+    pub fn decode_from_hex(&self) -> VerifyingKey {
+        let mut bytes_array: [u8;32] = [0u8;32];
+        
+        let bytes = hex::decode(&self.0).expect("Failed To Decode");
+
+        for i in 0..bytes.len() {
+            bytes_array[i] = bytes[i];
+        }
+
+        let vk = ed25519_dalek::VerifyingKey::from_bytes(&bytes_array).expect("Failed To Get Verifying Key From Bytes");
+
+        return vk
     }
 }
