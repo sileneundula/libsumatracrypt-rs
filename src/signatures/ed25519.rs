@@ -25,6 +25,19 @@ impl SumatraED25519 {
         return ED25519SecretKey(hex::encode_upper(sk.as_bytes()));
         
     }
+    pub fn verify<T: AsRef<[u8]>>(pk: ED25519PublicKey, bytes: T, signature: ED25519Signature) -> bool {
+        let vk = pk.decode_from_hex();
+        let sig = signature.decode_from_hex();
+
+        let is_valid = vk.verify_strict(bytes.as_ref(), &sig);
+
+        if is_valid.is_ok() {
+            return true
+        }
+        else {
+            return false
+        }
+    }
 }
 
 impl ED25519SecretKey {
