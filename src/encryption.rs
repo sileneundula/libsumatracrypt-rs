@@ -12,6 +12,8 @@ use zeroize::*;
 
 use new_rand::*;
 
+use crate::signatures::ed25519::ED25519PublicKey;
+
 // Security Warning: Do not show what operating system is used for RSA
 
 pub struct SumatraRSA4096;
@@ -32,6 +34,9 @@ pub struct ECIESSecretKey(String);
 
 #[derive(Zeroize, ZeroizeOnDrop)]
 pub struct ECIESCipherText(String);
+
+#[derive(Clone, Zeroize, ZeroizeOnDrop)]
+pub struct ECIESDecodedMessage(Vec<u8>);
 
 impl SumatraEncryptECIES {
     pub fn generate() -> (ECIESSecretKey,ECIESPublicKey)  {
@@ -61,18 +66,48 @@ impl SumatraEncryptECIES {
         return ECIESCipherText(ciphertext)
 
     }
-    pub fn decrypt(sk: ECIESSecretKey, ciphertext: ECIESCipherText) -> Vec<u8> {
+    pub fn decrypt(sk: ECIESSecretKey, ciphertext: ECIESCipherText) -> ECIESDecodedMessage {
         let sk_bytes = hex::decode(sk.0.as_bytes()).expect("Failed To Decoded Secret Key From Hex");
         let secretkey = ecies_ed25519::SecretKey::from_bytes(&sk_bytes).expect("Failed To Get Secret Key From Bytes");
 
         let decoded_ciphertext = bs58::decode(&ciphertext.0).into_vec().expect("Failed To Decode Ciphertext From Bs58");
         let decrypted = ecies_ed25519::decrypt(&secretkey, &decoded_ciphertext.as_ref()).expect("Failed To Decrypt Message From Encryption Key");
 
-        return decrypted
+        return ECIESDecodedMessage(decrypted)
     }
 }
 
+impl ECIESDecodedMessage {
+    pub fn to_utf8_string(&self) -> String {
+        return String::from_utf8(self.0.to_vec()).expect("Failed To Decode From String")
+    }
+    pub fn to_vec(&self) -> Vec<u8> {
+        return self.0.to_vec()
+    }
+    pub fn as_bytes(&self) -> &[u8] {
+        return &self.0
+    }
+}
 
+impl ECIESPublicKey {
+    pub fn to_bytes(&self) -> Vec<u8> {
+        return hex::decode(&self.0).expect("Failed To Decode From Hex");
+    }
+    pub fn public_key(&self) -> &str {
+        return &self.0
+    }
+    pub fn to_dalek_pk(&self) -> ecies_ed25519::PublicKey {
+        let bytes = self.to_bytes();
+
+        return ecies_ed25519::PublicKey::from_bytes(&bytes).expect("Failed To Construct Public Key From Bytes For ECIES")
+    }
+}
+
+impl ECIESSecretKey {
+    pub fn to_bytes(&self) -> Vec<u8> {
+        return hex::decode(&self.0).expect("Failed To Decode From Hex To Secret Key")
+    }
+}
 
 
 impl SumatraRSA4096 {

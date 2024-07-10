@@ -1,4 +1,4 @@
-use libsumatracrypt_rs::encryption::{ECIESPublicKey,ECIESSecretKey,SumatraEncryptECIES};
+use libsumatracrypt_rs::encryption::{ECIESPublicKey,ECIESSecretKey,SumatraEncryptECIES,ECIESDecodedMessage};
 
 #[cfg(test)]
 mod tests {
@@ -19,9 +19,7 @@ mod tests {
 
         let decrypted = SumatraEncryptECIES::decrypt(sk, ct);
 
-        let message = String::from_utf8(decrypted).expect("Failed To Convert Message");
-
-        println!("msg: {}",message);
+        println!("msg: {}",decrypted.to_utf8_string());
     }
 
 }
