@@ -15,7 +15,7 @@ impl SumatraEd448 {
         let compressed_public_key = public_key.compress();
         assert_eq!(compressed_public_key.to_bytes().len(), 57);
 
-        let compressed_pk_hex = hex::encode_upper(public_key.);
+        let compressed_pk_hex = hex::encode_upper(public_key.into());
         let secret_key_hex = hex::encode_upper(secret_key.to_bytes());
 
         return (Ed448SecretKey(secret_key_hex),Ed448PublicKey(compressed_pk_hex))
