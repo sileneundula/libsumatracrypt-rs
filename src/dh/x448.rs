@@ -10,6 +10,8 @@ pub struct X448SecretKey(String);
 
 pub struct X448PublicKey(String);
 
+pub struct X448SharedSecret(String);
+
 impl SumatraX448 {
     pub fn generation() -> (X448SecretKey,X448PublicKey) {
         let secret = Secret::new(&mut OsRng);
@@ -19,6 +21,24 @@ impl SumatraX448 {
         let pk_hex = hex::encode_upper(publickey.as_bytes());
 
         return (X448SecretKey(secret_hex),X448PublicKey(pk_hex))
+    }
+    /// Used for ephermal keys that are only used once.
+    pub fn to_shared_secret(sk: X448SecretKey, pk: X448PublicKey) -> X448SharedSecret {
+        let secret = sk.to_secret_type();
+        let public = pk.to_public_key_type();
+
+        let shared_secret: SharedSecret = secret.to_diffie_hellman(&public).expect("Failed To To Get Shared Secret");
+
+        return X448SharedSecret(hex::encode_upper(shared_secret.as_bytes()))
+    }
+    /// Used to copy key and keep key
+    pub fn as_shared_secret(sk: X448SecretKey, pk: X448PublicKey) -> X448SharedSecret {
+        let secret = sk.to_secret_type();
+        let public = pk.to_public_key_type();
+
+        let shared_secret: SharedSecret = secret.as_diffie_hellman(&public).expect("Failed To Get Shared Secret");
+
+        return X448SharedSecret(hex::encode_upper(shared_secret.as_bytes()))
     }
 }
 
@@ -66,5 +86,14 @@ impl X448PublicKey {
         let bytes = self.to_bytes();
 
         return x448::PublicKey::from_bytes(&bytes).expect("Failed To Get Public Key (X448) From Bytes")
+    }
+}
+
+impl X448SharedSecret {
+    pub fn to_bytes_from_hex(&self) -> Vec<u8> {
+        return hex::decode(self.0).expect("Failed To Decode To Bytes")
+    }
+    pub fn to_shared_secret_type(&self) -> SharedSecret {
+        SharedSecret::from_bytes(&self.to_bytes_from_hex()).expect("Failed To Get Shared Secret From Bytes For X448")
     }
 }
