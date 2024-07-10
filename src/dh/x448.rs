@@ -52,7 +52,7 @@ impl X448SecretKey {
         }
     }
     pub fn to_bytes(&self) -> Vec<u8> {
-        return hex::decode(self.0).expect("Failed To Decode From Hex")
+        return hex::decode(&self.0).expect("Failed To Decode From Hex")
     }
     pub fn secret_hex(&self) -> &str {
         return &self.0
@@ -77,7 +77,7 @@ impl X448PublicKey {
         return Self(pk_hex.as_ref().to_string())
     }
     pub fn to_bytes(&self) -> Vec<u8> {
-        return hex::decode(self.0).expect("Failed To Decode Public Key From Hex For X448")
+        return hex::decode(&self.0).expect("Failed To Decode Public Key From Hex For X448")
     }
     pub fn public_key_hex(&self) -> &str {
         return &self.0
@@ -91,7 +91,7 @@ impl X448PublicKey {
 
 impl X448SharedSecret {
     pub fn to_bytes_from_hex(&self) -> Vec<u8> {
-        return hex::decode(self.0).expect("Failed To Decode To Bytes")
+        return hex::decode(&self.0).expect("Failed To Decode To Bytes")
     }
     pub fn to_shared_secret_type(&self) -> SharedSecret {
         SharedSecret::from_bytes(&self.to_bytes_from_hex()).expect("Failed To Get Shared Secret From Bytes For X448")

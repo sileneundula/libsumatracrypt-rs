@@ -15,7 +15,7 @@ impl SumatraEd448 {
         let compressed_public_key = public_key.compress();
         assert_eq!(compressed_public_key.to_bytes().len(), 57);
 
-        let compressed_pk_hex = hex::encode_upper(public_key.into());
+        let compressed_pk_hex = hex::encode_upper(compressed_public_key.as_bytes());
         let secret_key_hex = hex::encode_upper(secret_key.to_bytes());
 
         return (Ed448SecretKey(secret_key_hex),Ed448PublicKey(compressed_pk_hex))
@@ -29,8 +29,8 @@ impl Ed448PublicKey {
     pub fn public_key(&self) -> &str {
         return &self.0
     }
-    pub fn to_usable_public_key(&self) -> CompressedEdwardsY {
+    pub fn to_usable_public_key(&self) {
         let bytes = self.to_bytes();
-        return EdwardsPoint::from_bytes(bytes)
+        //return EdwardsPoint::from_bytes(bytes)
     }
 }

@@ -1,5 +1,5 @@
 [package]
-name = "libvertigocrypt-rs"
+name = "libsumatracrypt-rs"
 authors = ["silene"]
 version = "0.1.0"
 description = "A Rust Library For Cryptography"
