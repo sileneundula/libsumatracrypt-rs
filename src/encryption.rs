@@ -113,7 +113,7 @@ impl ECIESPublicKey {
     }
     pub fn to_base32(&self) -> String {
         let pk_bytes = self.to_bytes();
-        return base32::encode(base32::Alphabet::Rfc4648 { padding: false }pk_bytes);
+        return base32::encode(base32::Alphabet::Rfc4648 { padding: false },&pk_bytes);
     }
     pub fn from_base32<T: AsRef<str>>(pk_bs32: T) -> Self {
         let pk_bytes = base32::decode(base32::Alphabet::Rfc4648 { padding: false }, pk_bs32.as_ref()).expect("Failed To Decode Base32");
