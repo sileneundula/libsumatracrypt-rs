@@ -52,6 +52,9 @@ impl SchnorrPublicKey {
             return false
         }
     }
+    pub fn simple_verify<T: AsRef<[u8]>>(&self, msg: T, signature: SchnorrSignature) -> bool {
+        return self.verify(CTX_DEFAULT,msg.as_ref(),signature)
+    }
     pub fn to_bytes(&self) -> Vec<u8> {
         let bs32_decoded_as_bytes = base32::decode(base32::Alphabet::Rfc4648 { padding: false },&self.0).unwrap();
         return bs32_decoded_as_bytes
@@ -78,6 +81,9 @@ impl SchnorrSecretKey {
         let signature = sk.sign_simple_doublecheck(ctx.as_ref(), msg.as_ref(), &pk).unwrap();
         let bs58_signature = bs58::encode(signature.to_bytes()).into_string();
         SchnorrSignature(bs58_signature)
+    }
+    pub fn simple_sign<T: AsRef<[u8]>>(&self, msg:T) -> SchnorrSignature {
+        return self.sign(CTX_DEFAULT,msg.as_ref())
     }
     pub fn validate(&self) -> bool {
         if self.0.len() == 103 {
