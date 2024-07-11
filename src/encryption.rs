@@ -9,6 +9,7 @@ use hex::*;
 use schnorrkel::derive;
 use sha2::Sha256;
 use zeroize::*;
+use base32::*;
 
 use new_rand::*;
 
@@ -90,6 +91,15 @@ impl ECIESDecodedMessage {
 }
 
 impl ECIESPublicKey {
+    pub fn new<T: AsRef<str>>(pk_hex: T) -> Self {
+        return Self::from_hex(pk_hex.as_ref())
+    }
+    pub fn from_hex<T: AsRef<str>>(pk: T) -> Self {
+        return Self(pk.as_ref().to_string())
+    }
+    pub fn from_bytes<T: AsRef<[u8]>>(pk_bytes: T) -> Self {
+        return Self(hex::encode_upper(pk_bytes.as_ref()))
+    }
     pub fn to_bytes(&self) -> Vec<u8> {
         return hex::decode(&self.0).expect("Failed To Decode From Hex");
     }
@@ -100,6 +110,14 @@ impl ECIESPublicKey {
         let bytes = self.to_bytes();
 
         return ecies_ed25519::PublicKey::from_bytes(&bytes).expect("Failed To Construct Public Key From Bytes For ECIES")
+    }
+    pub fn to_base32(&self) -> String {
+        let pk_bytes = self.to_bytes();
+        return base32::encode(base32::Alphabet::Rfc4648 { padding: false }pk_bytes);
+    }
+    pub fn from_base32<T: AsRef<str>>(pk_bs32: T) -> Self {
+        let pk_bytes = base32::decode(base32::Alphabet::Rfc4648 { padding: false }, pk_bs32.as_ref()).expect("Failed To Decode Base32");
+        return Self::from_bytes(&pk_bytes)
     }
 }
 
