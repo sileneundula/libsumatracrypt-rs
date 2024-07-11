@@ -1,5 +1,7 @@
 use schnorrkel::*;
 use new_rand::{Rng, rngs::OsRng};
+use hex::*;
+use zeroize::*;
 
 pub const CTX_DEFAULT: &[u8] = b"sumatracrypt";
 
@@ -8,7 +10,7 @@ pub const CTX_DEFAULT: &[u8] = b"sumatracrypt";
 // Signature: BASE58 || 87-88 len
 
 
-pub struct SchnorrAPI;
+pub struct SumatraSchnorrAPI;
 
 /// Schnorr Public Key (encoded in base32)
 #[derive(Debug,Clone,PartialEq,PartialOrd,Hash)]
@@ -31,8 +33,8 @@ impl SchnorrPublicKey {
     }
     pub fn generate() -> (SchnorrPublicKey,SchnorrSecretKey) {
         let keypair: Keypair = Keypair::generate_with(OsRng);
-        let bs32_public = base32::encode(base32::Alphabet::Crockford, &keypair.public.to_bytes());
-        let bs32_secret = base32::encode(base32::Alphabet::Crockford, &keypair.secret.to_bytes());
+        let bs32_public = base32::encode(base32::Alphabet::Rfc4648 { padding: false }, &keypair.public.to_bytes());
+        let bs32_secret = base32::encode(base32::Alphabet::Rfc4648 { padding: false }, &keypair.secret.to_bytes());
 
         return (SchnorrPublicKey(bs32_public),SchnorrSecretKey(bs32_secret))
     }
@@ -51,8 +53,17 @@ impl SchnorrPublicKey {
         }
     }
     pub fn to_bytes(&self) -> Vec<u8> {
-        let bs32_decoded_as_bytes = base32::decode(base32::Alphabet::Crockford,&self.0).unwrap();
+        let bs32_decoded_as_bytes = base32::decode(base32::Alphabet::Rfc4648 { padding: false },&self.0).unwrap();
         return bs32_decoded_as_bytes
+    }
+    pub fn to_hex(&self) -> String {
+        let bytes = self.to_bytes();
+        let pk_hex = hex::encode_upper(&bytes);
+        return pk_hex
+    }
+    pub fn from_hex<T: AsRef<str>>(pk_hex: T) -> Self {
+        let pk_bytes = hex::decode(pk_hex.as_ref()).expect("Failed To Decode From Hex For Schnorr Signature");
+        Self(base32::encode(base32::Alphabet::Rfc4648 { padding: false }, &pk_bytes))
     }
 }
 
@@ -61,7 +72,7 @@ impl SchnorrSecretKey {
         return self.0.clone()
     }
     pub fn sign<T: AsRef<[u8]>>(&self, ctx: T, msg: T) -> SchnorrSignature {
-        let decoded = base32::decode(base32::Alphabet::Crockford, &self.0).unwrap();
+        let decoded = base32::decode(base32::Alphabet::Rfc4648 { padding: false }, &self.0).unwrap();
         let sk = schnorrkel::SecretKey::from_bytes(&decoded).unwrap();
         let pk = sk.to_public();
         let signature = sk.sign_simple_doublecheck(ctx.as_ref(), msg.as_ref(), &pk).unwrap();
@@ -79,7 +90,7 @@ impl SchnorrSecretKey {
 }
 
 impl SchnorrSignature {
-    pub fn to_slinky_signature(&self) -> String {
+    pub fn signature_bs58(&self) -> String {
         return self.0.clone()
     }
     pub fn to_signature_in_schnorrkel(&self) -> schnorrkel::Signature {
@@ -95,6 +106,15 @@ impl SchnorrSignature {
         else {
             return false
         }
+    }
+    pub fn to_hex(&self) -> String {
+        let sig_bytes = self.to_bytes();
+        return hex::encode_upper(sig_bytes)
+    }
+    pub fn from_hex<T: AsRef<str>>(pk_hex: T) -> Self {
+        let bytes = hex::decode(pk_hex.as_ref()).expect("Failed To Decode Hex For Schnorr Signature");
+        let signature = bs58::encode(bytes).into_string();
+        Self(signature)
     }
 }
 
@@ -114,7 +134,7 @@ mod tests {
         println!("Generated Keypair");
         println!("Public Key: {} | length: {}",pk.public_key(), pk.public_key().len());
         println!("Secret Key: {} | length: {}",sk.secret_key(), sk.secret_key().len());
-        println!("Signature: {} | length: {}",sig.to_slinky_signature(), sig.to_slinky_signature().len());
+        println!("Signature: {} | length: {}",sig.signature_bs58(), sig.signature_bs58().len());
         println!("Is Signature Valid: {}", is_valid);
     }
 }
