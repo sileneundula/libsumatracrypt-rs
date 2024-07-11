@@ -41,7 +41,7 @@ impl SchnorrPublicKey {
     pub fn public_key(&self) -> String {
         return self.0.clone()
     }
-    pub fn verify<T: AsRef<[u8]>>(&self, ctx: T, msg: T, signature: SchnorrSignature) -> bool {
+    pub fn verify_with_context<T: AsRef<[u8]>>(&self, ctx: T, msg: T, signature: SchnorrSignature) -> bool {
         let pk = schnorrkel::keys::PublicKey::from_bytes(&self.to_bytes()).unwrap();
         let is_valid = pk.verify_simple(ctx.as_ref(), msg.as_ref(), &signature.to_signature_in_schnorrkel());
 
@@ -52,8 +52,8 @@ impl SchnorrPublicKey {
             return false
         }
     }
-    pub fn simple_verify<T: AsRef<[u8]>>(&self, msg: T, signature: SchnorrSignature) -> bool {
-        return self.verify(CTX_DEFAULT,msg.as_ref(),signature)
+    pub fn verify<T: AsRef<[u8]>>(&self, msg: T, signature: SchnorrSignature) -> bool {
+        return self.verify_with_context(CTX_DEFAULT,msg.as_ref(),signature)
     }
     pub fn to_bytes(&self) -> Vec<u8> {
         let bs32_decoded_as_bytes = base32::decode(base32::Alphabet::Rfc4648 { padding: false },&self.0).unwrap();
@@ -74,7 +74,7 @@ impl SchnorrSecretKey {
     pub fn secret_key(&self) -> String {
         return self.0.clone()
     }
-    pub fn sign<T: AsRef<[u8]>>(&self, ctx: T, msg: T) -> SchnorrSignature {
+    pub fn sign_with_context<T: AsRef<[u8]>>(&self, ctx: T, msg: T) -> SchnorrSignature {
         let decoded = base32::decode(base32::Alphabet::Rfc4648 { padding: false }, &self.0).unwrap();
         let sk = schnorrkel::SecretKey::from_bytes(&decoded).unwrap();
         let pk = sk.to_public();
@@ -82,8 +82,8 @@ impl SchnorrSecretKey {
         let bs58_signature = bs58::encode(signature.to_bytes()).into_string();
         SchnorrSignature(bs58_signature)
     }
-    pub fn simple_sign<T: AsRef<[u8]>>(&self, msg:T) -> SchnorrSignature {
-        return self.sign(CTX_DEFAULT,msg.as_ref())
+    pub fn sign<T: AsRef<[u8]>>(&self, msg:T) -> SchnorrSignature {
+        return self.sign_with_context(CTX_DEFAULT,msg.as_ref())
     }
     pub fn validate(&self) -> bool {
         if self.0.len() == 103 {

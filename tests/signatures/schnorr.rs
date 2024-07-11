@@ -13,7 +13,7 @@ mod tests {
         let (pk, sk) = SchnorrPublicKey::generate();
         let msg = "This message is being signed by sumatra using default context";
         
-        let signature = sk.sign(CTX_DEFAULT,msg.as_bytes());
+        let signature = sk.sign_with_context(CTX_DEFAULT,msg.as_bytes());
     }
 
     #[test]
@@ -21,9 +21,9 @@ mod tests {
         let (pk,sk) = SchnorrPublicKey::generate();
         let msg = "This message is being signed by sumatra using default context";
 
-        let signature = sk.sign(CTX_DEFAULT,msg.as_bytes());
+        let signature = sk.sign_with_context(CTX_DEFAULT,msg.as_bytes());
 
-        let verification = pk.verify(CTX_DEFAULT,msg.as_bytes(),signature);
+        let verification = pk.verify_with_context(CTX_DEFAULT,msg.as_bytes(),signature);
 
         assert!(verification);
     }
@@ -33,9 +33,9 @@ mod tests {
         let (pk,sk) = SchnorrPublicKey::generate();
         let msg = "This message is being signed by sumatra using default context";
 
-        let signature = sk.simple_sign(msg.as_bytes());
+        let signature = sk.sign(msg.as_bytes());
 
-        let verification = pk.simple_verify(msg.as_bytes(),signature);
+        let verification = pk.verify(msg.as_bytes(),signature);
 
         assert!(verification);
     }
