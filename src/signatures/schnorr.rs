@@ -133,9 +133,9 @@ mod tests {
         let (pk,sk) = SchnorrPublicKey::generate();
 
         let msg = "Default Message";
-        let sig = sk.sign(CTX_DEFAULT, msg.as_bytes());
+        let sig = sk.sign_with_context(CTX_DEFAULT, msg.as_bytes());
 
-        let is_valid = pk.verify(CTX_DEFAULT,msg.as_bytes(),sig.clone());
+        let is_valid = pk.verify_with_context(CTX_DEFAULT,msg.as_bytes(),sig.clone());
 
         println!("Generated Keypair");
         println!("Public Key: {} | length: {}",pk.public_key(), pk.public_key().len());
