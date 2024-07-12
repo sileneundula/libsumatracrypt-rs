@@ -1,7 +1,10 @@
 # libsumatracrypt-rs
 
 [![Crates.io Version](https://img.shields.io/crates/v/libsumatracrypt-rs?style=flat-square)](https://crates.io/crates/libsumatracrypt-rs)
+[![docs.rs](https://img.shields.io/docsrs/libsumatracrypt-rs)](https://docs.rs/libsumatracrypt-rs/latest/libsumatracrypt_rs/)
 ![Crates.io License](https://img.shields.io/crates/l/libsumatracrypt-rs?style=flat-square)
+![Crates.io Total Downloads](https://img.shields.io/crates/d/libsumatracrypt-rs?style=flat-square)
+| ![Discord](https://img.shields.io/discord/1261440665821253632?style=flat-square&logo=Discord)
 
 
 
