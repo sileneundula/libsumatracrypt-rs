@@ -6,12 +6,7 @@
 ![Crates.io Total Downloads](https://img.shields.io/crates/d/libsumatracrypt-rs?style=flat-square)
 | ![Discord](https://img.shields.io/discord/1261440665821253632?style=flat-square&logo=Discord)
 
-
-
-
-
-
-`libsumatracrypt-rs` is an **Open-Source Cryptography Library** written in pure-rust that is **Strictly-and-Inherently-Secure-By-Design**, has **Ease of Access**, has **Strong Documentation**, and offers extensions of **Advanced Cryptography** while maintaining a simple-to-use interface. It uses the `Sumatracrypt-Standardized-API-Model` to offer an easy-to-use API interface that is hard to blunder by design. It has loads of documentation detailing out certain design choices, how it works under-the-hood, among other things. It is:
+`libsumatracrypt-rs` is an **open-source cryptography library** written in pure-rust that is **strictly-and-inherently-secure-by-design**, has **ease of access**, has **strong documentation**, and offers extensions of **Advanced Cryptography** while maintaining a simple-to-use interface. It uses the `Sumatracrypt-Standardized-API-Model` to offer an easy-to-use API interface that is hard to blunder by design. It has loads of documentation detailing out certain design choices, how it works under-the-hood, among other things. It is:
 
 * easy-to-use
 
@@ -29,54 +24,31 @@
 
 * has **extensions** that use **Advanced Cryptography** (like Zero-Knowledge Proofs, Homomorphic Encryption, Post-Quantum Cryptography, Verifiable Random Functions, Verifiable Delay Functions) with **Standardized API** known as `sumatracryptadvanced-standardized-api`
 
-## Purpose
+## Library Purpose
 
-### General
+### For General User
 
 The purpose of `libsumatracrypt-rs` is to make a lightweight, pure-rust, cryptography library available to more people with **security at its core** (defending against even the most advanced attacks, like side-channel attacks) while maintaing **ease-of-access** and **easy-to-use API**, even against advanced attackers.
 
 It also wants to offer easy usage of more advanced cryptographic algorithms like **Zero-Knowledge Proofs**, **Homomorphic Encryption**, and **Post-Quantum Cryptography** to the general public with simple front-facing API.
 
-### Developers
+### For Developers
 
 The idea of development for future developers/contributors for `libsumatracrypt-rs` is to remain:
 
-* **Easy-To-Use** with a **simple interface** and **Standardized API** using `Sumatra-Standardized-API`.
-* **Lightweight** with **minimal dependecies** (and for these dependecies to be later audited or forked)
-* Have a **hard focus on security** (against side-channel attacks, timing-attacks, and advanced adversaries)
-* **Stay minimal in dependecies** and **fork projects when ready**
-* **Audit Specific Portions of the library one at a time**
-* **Make dependecies optional**
-* Make it **stupid hard** for the general user to misconfigure or have issues with keeping secure.
+* **Easy-To-Use** with a **simple interface** and **Standardized API** using `Sumatra-Standardized-API-Model`.
+* **Lightweight** with **minimal dependecies** (and for these dependecies to be later **audited** and/or later **forked**)
+* **Hard Focus on Strict Security** (including measures against side-channel attacks, timing-attacks, and advanced adversaries)
+* **Make Dependecies Optional** by *default* and seperate into different crates
+* Make it **absurdly hard** for the general user to botch (misconfigure, having issues with secrets, other user configuration attacks)
+* Have *substancial* documentation and in-depth discussions
+* Have **examples** in every crate
 
-`libsumatracrypt-rs` also boasts lots of documentation, lots of useful information for developers to use, constant talk around different mechanisms, and constant updates. Its goal is to fork other projects over-time and make sure all the code is secure and useful.
+#### For Developers (Security)
 
-It also is meant to combat **side-channel attacks** and **remain constant-time**.
+It also is meant to combat **side-channel attacks** and **remain constant-time**. Other security measures are also desirable.
 
-## How `libsumatracrypt-rs` Is Designed?
-
-Every piece of the code is looked at carefully and newer features are added in as time goes on. It is **well-maintained** and it focuses on `getting it right the first time`. It will be developed over a long period for optimal security against advanced attackers. It will also have easy to use API.
-
-## Purpose and Problems Addressed by libsumatracrypt-rs
-
-#### Basic Format
-
-As for now, all types are stored as `String` in usually hexadecimal-encoding
-
-### Format
-- [X] Minimalistic and Easy To Use API
-- [X] Uses Basic Encoding of `String` By Default Using **Hexadecimal/Base32/Base58** and PKCS#8 (working on changing)
-- [X] All `PublicKeys`, `SecretKeys`, `Ciphertexts`, `DecodedMessages`, `Signatures`, `Digests`, and more have their own **type** with useful methods and security features built-in.
-
-### Side-Channel Security
-- [X] All structs use `Zeroize/ZeroizeOnDrop` for **protection against stealing secrets (and some non-sensitive data is still zeroized for privacy) from memory after usage**. [[MITRE:T1212]](https://attack.mitre.org/techniques/T1212/)
-- [X] All verification is done using `Subtle` for **constant-time cryptography** to protect against timing attacks. | [A Beginners Guide To Constant Time](https://www.chosenplaintext.ca/articles/beginners-guide-constant-time-cryptography.html)
-
-### General Security
-- [X] Protection Against **Downgrading-Attacks** [(MITRE:T1562.010)](https://attack.mitre.org/techniques/T1562/010/) by not having any insecure protocols/algorithms by default.
-
-
-
+# General Overview
 
 ## Encryption
 
