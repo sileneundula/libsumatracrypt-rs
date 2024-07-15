@@ -7,6 +7,7 @@ use ed25519_dalek::*;
 
 use zeroize::*;
 
+#[derive(Zeroize, ZeroizeOnDrop)]
 pub struct SumatraED25519;
 
 #[derive(Zeroize, ZeroizeOnDrop)]
