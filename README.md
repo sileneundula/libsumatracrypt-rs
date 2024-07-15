@@ -6,17 +6,52 @@
 ![Crates.io Total Downloads](https://img.shields.io/crates/d/libsumatracrypt-rs?style=flat-square)
 | ![Discord](https://img.shields.io/discord/1261440665821253632?style=flat-square&logo=Discord)
 
-`libsumatracrypt-rs` is an **open-source cryptography library** written in pure-rust that is **strictly-and-inherently-secure-by-design**, has **ease of access**, has **strong documentation**, and offers extensions of **Advanced Cryptography** while maintaining a simple-to-use interface. It uses the `Sumatracrypt-Standardized-API-Model` to offer an easy-to-use API interface that is hard to blunder by design. It has loads of documentation detailing out certain design choices, how it works under-the-hood, among other things. It is:
+`libsumatracrypt-rs` is an **open-source cryptography library** written in pure-rust that is **strictly-and-inherently secure-by-design**, has **ease of access**, has **strong documentation**, and offers extensions of **advanced cryptography** (Zero-Knowledge Proofs, Homomorphic Encryption, Post-Quantum Cryptography) while maintaining a simple-to-use interface. It uses the `Sumatracrypt-Standardized-API-Model` to offer an easy-to-use API interface that is hard to blunder by design. It has loads of documentation detailing out certain design choices, how it works under-the-hood, among other things.
 
-* easy-to-use
+It currently **has the following cryptographic protocols implemented**:
 
-* pure-rust (so memory-safe)
+### Public-Key Encryption Schemes
 
-* lightweight
+* Elliptic Curve Integrated Encryption System (ECIES) using CURVE25519
+* RSA4096-OAEP
 
-* **strictly secure by design** with a hard focus made on security (including side-channel attacks and advanced adversaries)
+### Digital Signature Schemes
 
-* **minimalistic**, with minimal dependecies and optional dependecies
+* ED25519
+* Schnorr over Ristretto Compressed Ed25519 points
+* ED448 (not implemented yet)
+
+### Key Exchanges
+
+* X448 (on Curve448)
+
+### Hash Functions (Digests)
+
+* SHA2 (SHA2-224,SHA2-256,SHA2-384,SHA2-512)
+* BLAKE2B (Variable Length, Supports Keyed-Hash)
+* BLAKE3
+* SHA3 (SHA3-224, SHA3-256, SHA3-384, SHA3-512)
+* SHAKE256 (512-bits)
+
+### Cryptographically Secure Random Number Generator (CSPRNG)
+
+* a crossplatform `getrandom()` for getting operating system's cryptographically secure pseudorandom number generator (CSPRNG)
+
+---
+
+# General
+
+`libsumatracrypt-rs` is:
+
+* Easy-to-use
+
+* Pure-rust (so memory-safe)
+
+* Lightweight
+
+* **Strictly secure by design** with a hard focus made on security (including side-channel attacks and advanced adversaries)
+
+* **Minimalistic**, with minimal dependecies and optional dependecies
 
 * has **standardized API** known as `Sumatracrypt-Standardized-API-Model`
 
@@ -123,6 +158,32 @@ By default, all keys are encoded as a `String` in upper-hexadecimal encoding and
 The structs (`ED25519PublicKey`, `ED25519SecretKey`, `ED25519Signature`) are stored as `String` in **Upper-Hexadecimal Encoding**.
 
 - [X] [Security] **Secret Key** is generated from **32-bytes (256)** of **CSPRNG from operating system** as an `[u8;32]` | `array`
+
+---
+
+# TODO:
+
+## Encryption
+
+### `SumatraEncryptECIES` | **Elliptic Curve Integrated Encryption Scheme (ECIES)** over **Twisted Edwards Curve25519** using **AES-GCM** and **HKDF-SHA256** in pure-rust.
+  -  Boasts strong security guarentees, fast speeds, and small key sizes.
+  -  **Depends On:** Uses the `ecies-ed25519` crate with the `pure` feature flag.
+### `SumatraRSA4096` | **RSA4096** using **Optimal Asymmetric Encryption Padding (OAEP)** in pure-rust.
+  - Boasts **strong security** with well-reviewed, classical security arguments against the well-tested RSA algorithm, offering only one key size (the highest key size with the most security).
+  - Generation takes around 3-5 minutes for a new RSA4096 key. Good for long-term keys with classical security assumptions.
+  - **Depends On:** Uses the audited `rsa` crate
+
+## Digital Signatures
+
+### `SumatraEd25519` | Constant-Time ED25519 Sinature Scheme in pure-rust.
+
+**Ed25519** (view [Website](https://ed25519.cr.yp.to/)) is a cryptographic digital signature scheme that offers **strong security** with protection against various side-channel attacks and branching prediction. It is blazingly fast, offering
+
+`SumatraEd25519` offers strong security through its extensive use of the `ed25519-dalek` crate for ED25519 signatures. These signatures offer **strong security** by remaining constant-time, implementing zeroize, and being less vulnerable to side-channel attacks. It uses Curve25519.
+
+
+Constant-Time
+* Schnorr Signatures
 
 ## Hash Functions
 
