@@ -12,11 +12,11 @@ use zeroize::*;
 #[derive(Zeroize, ZeroizeOnDrop)]
 pub struct SumatraED25519;
 
-#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
+#[derive(Clone, Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
 pub struct ED25519PublicKey(String);
-#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
+#[derive(Clone, Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
 pub struct ED25519SecretKey(String);
-#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
+#[derive(Clone, Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
 pub struct ED25519Signature(String);
 
 impl SumatraED25519 {
