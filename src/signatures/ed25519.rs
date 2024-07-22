@@ -1,5 +1,7 @@
 use crate::csprng::SumatraCSPRNG;
 
+use serde::{Serialize,Deserialize};
+
 use rand::rngs::OsRng;
 use ed25519_dalek::SigningKey;
 use ed25519_dalek::Signature;
@@ -10,11 +12,11 @@ use zeroize::*;
 #[derive(Zeroize, ZeroizeOnDrop)]
 pub struct SumatraED25519;
 
-#[derive(Zeroize, ZeroizeOnDrop)]
+#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
 pub struct ED25519PublicKey(String);
-#[derive(Zeroize, ZeroizeOnDrop)]
+#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
 pub struct ED25519SecretKey(String);
-#[derive(Zeroize, ZeroizeOnDrop)]
+#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
 pub struct ED25519Signature(String);
 
 impl SumatraED25519 {
@@ -44,6 +46,9 @@ impl SumatraED25519 {
 impl ED25519SecretKey {
     pub fn new(key: [u8;32]) -> Self {
         Self(hex::encode_upper(ed25519_dalek::SigningKey::from_bytes(&key).as_bytes()))
+    }
+    pub fn from_str<T: AsRef<str>>(pk_hex: T) -> Self {
+        return Self(pk_hex.as_ref().to_owned())
     }
     pub fn sign<T: AsRef<[u8]>>(&self, bytes: T) -> ED25519Signature {
         let signingkey = self.decode_from_hex();

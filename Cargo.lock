@@ -600,7 +600,7 @@ checksum = "4ec2a862134d2a7d32d7983ddcdd1c4923530833c9f2ea1a44fc5fa473989058"
 
 [[package]]
 name = "libsumatracrypt-rs"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "base32",
  "blake2-rfc",
@@ -615,6 +615,7 @@ dependencies = [
  "rand 0.8.5",
  "rsa",
  "schnorrkel",
+ "serde",
  "sha2 0.10.8",
  "subtle",
  "tiny-keccak",
