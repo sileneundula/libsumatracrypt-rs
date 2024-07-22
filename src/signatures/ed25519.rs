@@ -66,6 +66,10 @@ impl ED25519SecretKey {
     pub fn to_public_key(&self) -> ED25519PublicKey {
         return ED25519PublicKey(hex::encode_upper(self.decode_from_hex().verifying_key().as_bytes()));
     }
+    // Dangerous
+    pub fn to_string(&self) -> String {
+        return self.0.clone()
+    }
 }
 
 impl ED25519PublicKey {
@@ -97,6 +101,9 @@ impl ED25519PublicKey {
 
         return vk
     }
+    pub fn to_string(&self) -> String {
+        return self.0.clone()
+    }
 }
 
 impl ED25519Signature {
@@ -110,5 +117,8 @@ impl ED25519Signature {
         }
 
         return ed25519_dalek::Signature::from_bytes(&bytes_array)
+    }
+    pub fn to_string(&self) -> String {
+        self.0.clone()
     }
 }
