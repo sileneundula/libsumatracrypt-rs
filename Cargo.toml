@@ -1,7 +1,7 @@
 [package]
 name = "libsumatracrypt-rs"
 authors = ["silene0259"]
-version = "0.1.3"
+version = "0.2.0"
 description = "A Rust Library For Cryptography"
 keywords = ["crypto","cryptography","encryption","digest","signature"]
 categories = ["cryptography"]
