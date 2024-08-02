@@ -1,15 +1,19 @@
 use rand::rngs::OsRng;
 use x448::*;
 use hex::*;
+use zeroize::{Zeroize,ZeroizeOnDrop};
 
 // Add Double-Ratchet
 
 pub struct SumatraX448;
 
+#[derive(Zeroize, ZeroizeOnDrop)]
 pub struct X448SecretKey(String);
 
+#[derive(Zeroize, ZeroizeOnDrop)]
 pub struct X448PublicKey(String);
 
+#[derive(Zeroize, ZeroizeOnDrop)]
 pub struct X448SharedSecret(String);
 
 impl SumatraX448 {

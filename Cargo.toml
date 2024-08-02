@@ -1,7 +1,7 @@
 [package]
 name = "libsumatracrypt-rs"
 authors = ["silene0259"]
-version = "0.2.0"
+version = "0.3.0"
 description = "A Rust Library For Cryptography"
 keywords = ["crypto","cryptography","encryption","digest","signature"]
 categories = ["cryptography"]
@@ -14,38 +14,50 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-new-rand = {package = "rand", version="0.8.5"}
+new-rand = {package = "rand", version="0.8.5", optional=true}
 
-rand = "0.7.3"
-ecies-ed25519 = "0.5.1"
-rsa = { version = "0.9.6", features = ["sha2","pem"] }
+rand = {verison = "0.7.3", optional=true}
+ecies-ed25519 = {version = "0.5.1", optional=true}
+rsa = { version = "0.9.6", features = ["sha2","pem"], optional=true }
 
 zeroize = "1.8.1"
-subtle = "2.6"
 
 
 # CSPRNG
-getrandom = "0.2.14"
+getrandom = {version = "0.2.14", optional=true}
 
 # Encoding
-base32 = "0.5.0"
-hex = "0.4.3"
-bs58 = "0.5.1"
+base32 = {version="0.5.0", optional = true}
+hex = {version = "0.4.3", optional=true}
+bs58 = {version="0.5.1",optional=true}
 
 # Digest
-blake3 = "1.5.1"
-blake2-rfc = "0.2.18"
-sha2 = "0.10.8"
-tiny-keccak = { version = "2.0.2", features = ["sha3","shake"] }
-sha1 = "0.10.6"
+blake3 = {version = "1.5.1", optional = true}
+blake2-rfc = {version = "0.2.18", optional = true}
+sha2 = {version="0.10.8", optional = true}
+tiny-keccak = { version = "2.0.2", features = ["sha3","shake"], optional= true }
+sha1 = {version = "0.10.6", optional=true}
 
 
 # Signature
-schnorrkel = "0.11.4"
-ed25519-dalek = "2.0.0-rc.3"
-ed448-goldilocks-plus = "0.11.2"
+schnorrkel = {version = "0.11.4", optional=true}
+ed25519-dalek = {version="2.0.0-rc.3", optional=true}
+ed448-goldilocks-plus = {version="0.11.2", optional=true}
 
 # DH (Key-Exchange)
-x448 = "0.6.0"
+x448 = {version="0.6.0", optional=true}
 
-serde = { version = "1.0", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"], optional=true }
+
+[features]
+default = ["digests","signatures","encryption","csprng","dh","serialization","encoding","extraencoding"]
+
+digests = ["blake3","blake2-rfc","sha2","tiny-keccak","sha1","encoding"]
+signatures = ["schnorrkel","ed25519-dalek","ed448-goldilocks-plus","new-rand","rand","encoding","extraencoding","csprng"]
+encryption = ["rsa","ecies-ed25519","new-rand","rand","encoding","extraencoding"]
+csprng = ["getrandom"]
+dh = ["x448","rand","encoding"]
+extraencoding = ["bs58","base32"]
+encoding = ["hex"]
+
+serialization = ["serde"]
