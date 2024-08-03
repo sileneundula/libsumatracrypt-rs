@@ -11,7 +11,6 @@ pub mod digest;
 pub mod signatures;
 
 /// Cryptographically Secure Pseudorandom Number Generator (Using Operating System)
-#[cfg(feature = "csprng")]
 pub mod csprng;
 
 /// Key Exchanges including x448
