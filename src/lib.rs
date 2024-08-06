@@ -16,3 +16,5 @@ pub mod csprng;
 /// Key Exchanges including x448
 #[cfg(feature = "dh")]
 pub mod dh;
+
+pub mod pq;

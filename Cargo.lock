@@ -184,6 +184,11 @@ name = "cc"
 version = "1.0.104"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "74b6a57f98764a267ff415d50a25e6e166f3831a5071af4995296ea97d210490"
+dependencies = [
+ "jobserver",
+ "libc",
+ "once_cell",
+]
 
 [[package]]
 name = "cfg-if"
@@ -351,6 +356,12 @@ dependencies = [
  "const-oid",
  "crypto-common",
 ]
+
+[[package]]
+name = "dunce"
+version = "1.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "92773504d58c093f6de2459af4af33faa518c13451eb8f2b5698ed3d36e7c813"
 
 [[package]]
 name = "ecies-ed25519"
@@ -526,6 +537,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "glob"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
+
+[[package]]
 name = "group"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -567,6 +584,15 @@ name = "itoa"
 version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49f1f14873335454500d59611f1cf4a4b0f786f9ac11f4312a78e4cf2566695b"
+
+[[package]]
+name = "jobserver"
+version = "0.1.32"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "48d1dbcbbeb6a7fec7e059840aa538bd62aaccf972c7346c4d9d2059312853d0"
+dependencies = [
+ "libc",
+]
 
 [[package]]
 name = "keccak"
@@ -611,6 +637,10 @@ dependencies = [
  "ed448-goldilocks-plus",
  "getrandom 0.2.15",
  "hex",
+ "pqcrypto-dilithium",
+ "pqcrypto-falcon",
+ "pqcrypto-sphincsplus",
+ "pqcrypto-traits",
  "rand 0.7.3",
  "rand 0.8.5",
  "rsa",
@@ -689,6 +719,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "once_cell"
+version = "1.19.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3fdb12b2476b595f9358c5161aa467c2438859caa136dec86c26fdd2efe17b92"
+
+[[package]]
 name = "opaque-debug"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -740,6 +776,63 @@ name = "ppv-lite86"
 version = "0.2.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b40af805b3121feab8a3c29f04d8ad262fa8e0561883e7653e024ae4479e6de"
+
+[[package]]
+name = "pqcrypto-dilithium"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "685de0fa68c6786559d5fcdaa414f0cd68ef3f5d162f61823bd7424cd276726f"
+dependencies = [
+ "cc",
+ "glob",
+ "libc",
+ "pqcrypto-internals",
+ "pqcrypto-traits",
+]
+
+[[package]]
+name = "pqcrypto-falcon"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "35d1d53b8392f416aa11943f83c0372d88090d9c236b21a7f19352e61542119d"
+dependencies = [
+ "cc",
+ "glob",
+ "libc",
+ "pqcrypto-internals",
+ "pqcrypto-traits",
+]
+
+[[package]]
+name = "pqcrypto-internals"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d9d34bec6abe2283e6de7748b68b292d1ffa2203397e3e71380ff8418a49fb46"
+dependencies = [
+ "cc",
+ "dunce",
+ "getrandom 0.2.15",
+ "libc",
+]
+
+[[package]]
+name = "pqcrypto-sphincsplus"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82ea17a14b7623f262460f07e2773ae62b25c65e935db87581addd60cc9316c3"
+dependencies = [
+ "cc",
+ "glob",
+ "libc",
+ "pqcrypto-internals",
+ "pqcrypto-traits",
+]
+
+[[package]]
+name = "pqcrypto-traits"
+version = "0.3.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "94e851c7654eed9e68d7d27164c454961a616cf8c203d500607ef22c737b51bb"
 
 [[package]]
 name = "proc-macro2"
