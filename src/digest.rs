@@ -5,6 +5,8 @@ use tiny_keccak::{Shake, *};
 use sha1::{Sha1};
 use hex::*;
 
+use serde::{Serialize,Deserialize};
+
 use zeroize::{Zeroize,ZeroizeOnDrop,Zeroizing};
 
 pub struct SumatraBlake3;
@@ -15,7 +17,7 @@ pub struct SumatraShake256;
 
 pub struct SumatraSha1;
 
-#[derive(Zeroize,ZeroizeOnDrop,Clone)]
+#[derive(Zeroize,ZeroizeOnDrop,Clone,Serialize,Deserialize)]
 pub struct SumatraDigest(String);
 
 impl SumatraDigest {

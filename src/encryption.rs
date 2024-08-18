@@ -11,6 +11,8 @@ use sha2::Sha256;
 use zeroize::*;
 use base32::*;
 
+use serde::{Serialize,Deserialize};
+
 use new_rand::*;
 
 use crate::signatures::ed25519::ED25519PublicKey;
@@ -19,24 +21,24 @@ use crate::signatures::ed25519::ED25519PublicKey;
 
 pub struct SumatraRSA4096;
 
-#[derive(Zeroize, ZeroizeOnDrop)]
+#[derive(Zeroize, ZeroizeOnDrop, Serialize, Deserialize)]
 pub struct SumatraRSAPublicKey(String);
 
-#[derive(Zeroize, ZeroizeOnDrop)]
+#[derive(Zeroize, ZeroizeOnDrop, Serialize, Deserialize)]
 pub struct SumatraRSASecretKey(String);
 
 pub struct SumatraEncryptECIES;
 
-#[derive(Zeroize, ZeroizeOnDrop)]
+#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
 pub struct ECIESPublicKey(String);
 
-#[derive(Zeroize, ZeroizeOnDrop)]
+#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
 pub struct ECIESSecretKey(String);
 
-#[derive(Zeroize, ZeroizeOnDrop)]
+#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
 pub struct ECIESCipherText(String);
 
-#[derive(Clone, Zeroize, ZeroizeOnDrop)]
+#[derive(Clone, Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
 pub struct ECIESDecodedMessage(Vec<u8>);
 
 impl SumatraEncryptECIES {

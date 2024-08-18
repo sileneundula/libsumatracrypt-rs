@@ -7,6 +7,9 @@ use ed25519_dalek::SigningKey;
 use ed25519_dalek::Signature;
 use ed25519_dalek::*;
 
+use bs58;
+use base32;
+
 use zeroize::*;
 
 #[derive(Zeroize, ZeroizeOnDrop)]
@@ -109,6 +112,15 @@ impl ED25519PublicKey {
     pub fn to_string(&self) -> String {
         return self.0.clone()
     }
+    pub fn to_base32(&self) -> String {
+        let bytes = hex::decode(&self.0).expect("Failed To Convert To Hex");
+        let bs32 = base32::encode(base32::Alphabet::Rfc4648 { padding: false },&bytes);
+        return bs32
+    }
+    pub fn from_base32<T: AsRef<str>>(s: T) -> Self {
+        let bytes = base32::decode(base32::Alphabet::Rfc4648 { padding: false }, s.as_ref()).expect("Failed To Decode Base58");
+        return Self(hex::encode_upper(bytes))
+    }
 }
 
 impl ED25519Signature {
@@ -123,7 +135,22 @@ impl ED25519Signature {
 
         return ed25519_dalek::Signature::from_bytes(&bytes_array)
     }
+    pub fn to_bytes(&self) -> Vec<u8> {
+        let bytes = hex::decode(&self.0).expect("Failed To Decode From Hex");
+
+        return bytes
+    }
     pub fn to_string(&self) -> String {
         self.0.clone()
+    }
+    pub fn to_base58(&self) -> String {
+        let bytes = self.to_bytes();
+        let s = bs58::encode(bytes).into_string();
+
+        return s
+    }
+    pub fn from_base58<T: AsRef<str>>(sig_as_bs58: T) -> Self {
+        let s: Vec<u8> = bs58::decode(sig_as_bs58.as_ref()).into_vec().expect("Failed TO Convert To Base58");
+        Self(hex::encode_upper(s))
     }
 }
