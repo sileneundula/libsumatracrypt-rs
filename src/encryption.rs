@@ -29,13 +29,13 @@ pub struct SumatraRSASecretKey(String);
 
 pub struct SumatraEncryptECIES;
 
-#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
+#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize,Clone)]
 pub struct ECIESPublicKey(String);
 
-#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
+#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize,Clone)]
 pub struct ECIESSecretKey(String);
 
-#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
+#[derive(Zeroize, ZeroizeOnDrop,Serialize,Deserialize,Clone)]
 pub struct ECIESCipherText(String);
 
 #[derive(Clone, Zeroize, ZeroizeOnDrop,Serialize,Deserialize)]
