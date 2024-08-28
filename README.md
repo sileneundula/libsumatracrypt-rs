@@ -27,6 +27,7 @@ It currently **has the following cryptographic protocols implemented**:
 
 ### Hash Functions (Digests)
 
+* SHA1
 * SHA2 (SHA2-224,SHA2-256,SHA2-384,SHA2-512)
 * BLAKE2B (Variable Length, Supports Keyed-Hash)
 * BLAKE3
@@ -36,6 +37,12 @@ It currently **has the following cryptographic protocols implemented**:
 ### Cryptographically Secure Random Number Generator (CSPRNG)
 
 * a crossplatform `getrandom()` for getting operating system's cryptographically secure pseudorandom number generator (CSPRNG)
+
+## Post-Quantum
+
+### Signatures
+
+* FALCON1024
 
 ---
 
