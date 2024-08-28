@@ -17,4 +17,5 @@ pub mod csprng;
 #[cfg(feature = "dh")]
 pub mod dh;
 
+#[cfg(feature = "pq")]
 pub mod pq;
