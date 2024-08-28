@@ -1,7 +1,7 @@
 [package]
 name = "libsumatracrypt-rs"
 authors = ["silene0259"]
-version = "0.4.2"
+version = "0.4.3"
 description = "A Rust Library For Cryptography"
 keywords = ["crypto","cryptography","encryption","digest","signature"]
 categories = ["cryptography"]
@@ -20,7 +20,7 @@ rand = "0.7.3"
 ecies-ed25519 = {version = "0.5.1", optional=true}
 rsa = { version = "0.9.6", features = ["sha2","pem"], optional=true }
 
-zeroize = "1.8.1"
+zeroize = { version = "1.8.1", features=["derive"]}
 
 
 # CSPRNG
