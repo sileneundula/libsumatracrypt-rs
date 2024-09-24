@@ -57,6 +57,10 @@ pqcrypto-sphincsplus = { version = "0.7.0", optional=true}
 pqcrypto-dilithium = {version= "0.5.0", optional=true}
 pqcrypto-falcon = { version= "0.3.0", optional=true}
 
+pqc_kyber = {version = "0.7.1", features = ["kyber1024", "zeroize"]}
+#safe_pqc_kyber = {version = "0.6.3", features=["kyber1024"]}
+
+
 [features]
 default = ["digests","signatures","encryption","dh","pq"]
 
