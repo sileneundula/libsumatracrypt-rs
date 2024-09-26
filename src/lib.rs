@@ -19,3 +19,5 @@ pub mod dh;
 
 #[cfg(feature = "pq")]
 pub mod pq;
+
+pub mod sym_encryption;

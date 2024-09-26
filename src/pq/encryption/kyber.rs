@@ -47,5 +47,24 @@ impl Kyber1024SecretKey {
         let sk_bytes = hex::decode(&self.0).expect("Failed To Decode Kyber Secret Key From Hex");
         return sk_bytes
     }
+    pub fn decapsulate(&self, ctx: Kyber1024CipherText) -> Kyber1024SharedSecret {
+        let shared_secret_bob = decapsulate(&ctx.from_hex(), &Self::to_bytes(&self)).expect("Failed To Decapsulate");
+        let shared_secret = hex::encode_upper(ctx.from_hex());
+        return Kyber1024SharedSecret(shared_secret)
+    }
+}
+
+impl Kyber1024CipherText {
+    pub fn from_hex(&self) -> Vec<u8> {
+        let ctx = hex::decode(&self.0).expect("Failed To Decode CTX from hex");
+        return ctx
+    }
+}
+
+impl Kyber1024SharedSecret {
+    pub fn from_hex(&self) -> Vec<u8> {
+        let ss = hex::decode(&self.0).expect("Failed To Decode Shared Secret From Kyber1024");
+        return ss
+    }
 }
 

@@ -59,7 +59,7 @@ pqcrypto-falcon = { version= "0.3.0", optional=true}
 
 pqc_kyber = {version = "0.7.1", features = ["kyber1024", "zeroize"]}
 #safe_pqc_kyber = {version = "0.6.3", features=["kyber1024"]}
-
+chacha20poly1305 = "0.10.1"
 
 [features]
 default = ["digests","signatures","encryption","dh","pq"]
