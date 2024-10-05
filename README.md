@@ -44,6 +44,12 @@ It currently **has the following cryptographic protocols implemented**:
 
 * FALCON1024
 
+* Dilithium3
+
+## Key-Encapsulation
+
+* Kyber1024 (KyberSlash Vulnerability; May switch to safe_pq_kyber)
+
 ---
 
 # General
