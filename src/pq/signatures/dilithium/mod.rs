@@ -38,6 +38,9 @@ impl Dilithium3SecretKey {
         let bytes = hex::decode(&self.0).expect("Failed To Decode");
         return bytes
     }
+    pub fn from_bytes<T: AsRef<[u8]>>(bytes: T) -> Self {
+        Self(hex::encode_upper(bytes.as_ref()))
+    }
     pub fn to_pqcrtop(&self) -> pqcrypto_dilithium::dilithium3::SecretKey {
         let bytes = self.to_bytes();
         return SecretKey::from_bytes(&bytes).expect("Failed To Decode Falcon1024 From Bytes")
@@ -45,6 +48,9 @@ impl Dilithium3SecretKey {
 }
 
 impl Dilithium3PublicKey {
+    pub fn from_bytes<T: AsRef<[u8]>>(bytes: T) -> Self {
+        Self(hex::encode_upper(bytes.as_ref()))
+    }
     pub fn to_bytes(&self) -> Vec<u8> {
         let bytes = hex::decode(&self.0).expect("Failed To Convert");
         return bytes
@@ -60,6 +66,9 @@ impl Dilithium3PublicKey {
 }
 
 impl Dilithium3Signature {
+    pub fn from_bytes<T: AsRef<[u8]>>(bytes: T) -> Self {
+        Self(hex::encode_upper(bytes.as_ref()))
+    }
     pub fn to_bytes(&self) -> Vec<u8> {
         return hex::decode(&self.0).expect("Failed To Decode From Hex")
     }
