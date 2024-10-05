@@ -41,7 +41,7 @@ sha1 = {version = "0.10.6", optional=true}
 
 # Signature
 schnorrkel = {version = "0.11.4", optional=true}
-ed25519-dalek = {version="2.0.0-rc.3", optional=true}
+ed25519-dalek = {version="2.1.1", optional=true}
 ed448-goldilocks-plus = {version="0.11.2", optional=true}
 
 # DH (Key-Exchange)
