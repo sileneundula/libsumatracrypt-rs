@@ -1,3 +1,13 @@
+/// # ED25519 (Dalek)
+/// 
+/// ## Description
+/// 
+/// Uses ED25519-dalek digital signature scheme.
+/// 
+/// ## Developer Notes
+/// 
+/// **Randomness:** Uses 32-bytes of os-csprng to generate key.
+
 use crate::csprng::SumatraCSPRNG;
 
 use serde::{Serialize,Deserialize};
@@ -12,6 +22,18 @@ use base32;
 
 use zeroize::*;
 
+// Built-In Error-Checking
+use crate::errors::SumatraCryptErrors;
+
+/// # SumatraED25519 Struct
+/// 
+/// This struct is used to generate a secret key and to verify signatures.
+/// 
+/// It includes the methods:
+/// 
+/// - new()
+/// 
+/// - verify()
 #[derive(Zeroize, ZeroizeOnDrop)]
 pub struct SumatraED25519;
 
@@ -23,20 +45,30 @@ pub struct ED25519SecretKey(String);
 pub struct ED25519Signature(String);
 
 impl SumatraED25519 {
+    /// Generates a new ED25519 Secret Key using 32-bytes of os-csprng from the operating system and encodes into hexadecimal.
     pub fn new() -> ED25519SecretKey {        
+        // Generate 32-bytes of OS-CSPRNG
         let csprng = SumatraCSPRNG::new_32();
 
+        // Secrekt Key From Bytes
         let sk = SigningKey::from_bytes(&csprng);
 
+        // Returns Encoded Key
         return ED25519SecretKey(hex::encode_upper(sk.as_bytes()));
         
     }
+    /// Verifies an ED25519 Digital Signature using bytes
     pub fn verify<T: AsRef<[u8]>>(pk: ED25519PublicKey, bytes: T, signature: ED25519Signature) -> bool {
+        // Verifying Key
         let vk = pk.decode_from_hex();
+        
+        // Signature
         let sig = signature.decode_from_hex();
 
+        // Verify Strictly The ED25519 Signature
         let is_valid = vk.verify_strict(bytes.as_ref(), &sig);
 
+        // Return Result
         if is_valid.is_ok() {
             return true
         }
@@ -47,8 +79,13 @@ impl SumatraED25519 {
 }
 
 impl ED25519SecretKey {
+    /// Signing Key From Bytes
     pub fn new(key: [u8;32]) -> Self {
         Self(hex::encode_upper(ed25519_dalek::SigningKey::from_bytes(&key).as_bytes()))
+    }
+    /// Generates a new keypair from 32-bytes of OS-CSPRNG
+    pub fn generate() -> Self {
+        return SumatraED25519::new()
     }
     pub fn from_str<T: AsRef<str>>(pk_hex: T) -> Self {
         return Self(pk_hex.as_ref().to_owned())
@@ -77,6 +114,10 @@ impl ED25519SecretKey {
     // Dangerous
     pub fn to_string(&self) -> String {
         return self.0.clone()
+    }
+    /// Converts to &str
+    pub fn as_str(&self) -> &str {
+        return self.0.as_str()
     }
 }
 

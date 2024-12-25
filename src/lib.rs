@@ -21,3 +21,5 @@ pub mod dh;
 pub mod pq;
 
 pub mod sym_encryption;
+
+pub mod errors;

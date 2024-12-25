@@ -18,7 +18,7 @@ new-rand = {package = "rand", version="0.8.5"}
 
 rand = "0.7.3"
 ecies-ed25519 = {version = "0.5.1", optional=true}
-rsa = { version = "0.9.6", features = ["sha2","pem"], optional=true }
+rsa = { version = "0.9.7", features = ["sha2","pem"], optional=true }
 
 zeroize = { version = "1.8.1", features=["derive"]}
 
@@ -31,8 +31,11 @@ base32 = "0.5.0"
 hex = "0.4.3" 
 bs58 = "0.5.1"
 
+# SecureEncoding
+subtle-encoding = "0.5.1"
+
 # Digest
-blake3 = {version = "1.5.4", optional = true}
+blake3 = {version = "1.5.5", optional = true}
 blake2-rfc = {version = "0.2.18", optional = true}
 sha2 = {version="0.10.8", optional = true}
 tiny-keccak = { version = "2.0.2", features = ["sha3","shake"], optional= true }
@@ -42,7 +45,7 @@ sha1 = {version = "0.10.6", optional=true}
 # Signature
 schnorrkel = {version = "0.11.4", optional=true}
 ed25519-dalek = {version="2.1.1", optional=true}
-ed448-goldilocks-plus = {version="0.11.2", optional=true}
+ed448-goldilocks-plus = {version="0.13.2", optional=true}
 # BLS Aggregate Signatures
 bls-signatures = "0.15.0"
 
@@ -57,11 +60,14 @@ pqcrypto-traits = { version = "0.3.5", optional=true}
 # Post-Quantum Signatures
 pqcrypto-sphincsplus = { version = "0.7.0", optional=true}
 pqcrypto-dilithium = {version= "0.5.0", optional=true}
-pqcrypto-falcon = { version= "0.3.0", optional=true}
+pqcrypto-falcon = { version= "0.4.0", optional=true}
 
 pqc_kyber = {version = "0.7.1", features = ["kyber1024", "zeroize"]}
 #safe_pqc_kyber = {version = "0.6.3", features=["kyber1024"]}
 chacha20poly1305 = "0.10.1"
+
+# Errors
+thiserror = "2.0.0"
 
 [features]
 default = ["digests","signatures","encryption","dh","pq"]
