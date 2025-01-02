@@ -20,6 +20,7 @@ It currently **has the following cryptographic protocols implemented**:
 * ED25519
 * Schnorr over Ristretto Compressed Ed25519 points
 * ED448 (not implemented yet)
+* BLS
 
 ### Key Exchanges
 
@@ -49,6 +50,10 @@ It currently **has the following cryptographic protocols implemented**:
 ## Key-Encapsulation
 
 * Kyber1024 (KyberSlash Vulnerability; May switch to safe_pq_kyber)
+
+## BIP39
+
+- Mnemonic Phrases Included In Multiple Languages
 
 ---
 
