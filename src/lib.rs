@@ -23,3 +23,5 @@ pub mod pq;
 pub mod sym_encryption;
 
 pub mod errors;
+
+pub mod bip39;

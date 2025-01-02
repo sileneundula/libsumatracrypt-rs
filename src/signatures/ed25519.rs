@@ -7,15 +7,20 @@
 /// ## Developer Notes
 /// 
 /// **Randomness:** Uses 32-bytes of os-csprng to generate key.
+/// 
+/// Added BIP39 From Seed. Must use 32-bytes.
 
 use crate::csprng::SumatraCSPRNG;
 
+use bip39::Language;
 use serde::{Serialize,Deserialize};
 
 use rand::rngs::OsRng;
 use ed25519_dalek::SigningKey;
 use ed25519_dalek::Signature;
 use ed25519_dalek::*;
+
+use crate::bip39::MnemonicPhrase;
 
 use bs58;
 use base32;
@@ -57,6 +62,10 @@ impl SumatraED25519 {
         return ED25519SecretKey(hex::encode_upper(sk.as_bytes()));
         
     }
+    pub fn from_seed(seed: [u8;32]) -> ED25519SecretKey {
+        let sk = SigningKey::from_bytes(&seed);
+        return ED25519SecretKey(hex::encode_upper(sk.as_bytes()));
+    }
     /// Verifies an ED25519 Digital Signature using bytes
     pub fn verify<T: AsRef<[u8]>>(pk: ED25519PublicKey, bytes: T, signature: ED25519Signature) -> bool {
         // Verifying Key
@@ -82,6 +91,10 @@ impl ED25519SecretKey {
     /// Signing Key From Bytes
     pub fn new(key: [u8;32]) -> Self {
         Self(hex::encode_upper(ed25519_dalek::SigningKey::from_bytes(&key).as_bytes()))
+    }
+    pub fn from_seed(seed: [u8;32]) -> Self {
+        let sk = SigningKey::from_bytes(&seed);
+        return Self(hex::encode_upper(sk.as_bytes()))
     }
     /// Generates a new keypair from 32-bytes of OS-CSPRNG
     pub fn generate() -> Self {

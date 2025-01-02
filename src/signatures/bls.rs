@@ -5,6 +5,8 @@
 /// ## Developer Notes
 /// 
 /// The input to each keypair is 64-bytes of os-randomness as opposed to 32-bytes.
+/// 
+/// BIP39 added using 64-bytes
 
 use crate::csprng::SumatraCSPRNG;
 
@@ -37,6 +39,15 @@ impl SumatraBLS {
     pub fn new() -> (BLSSecretKey,BLSPublicKey) {
         let rng_bytes = SumatraCSPRNG::get_64_bytes_from_os();
         let sk_as_bls = bls_signatures::PrivateKey::new(rng_bytes);
+        let pk_as_bls = sk_as_bls.public_key();
+        
+        let sk = hex::encode_upper(sk_as_bls.as_bytes());
+        let pk = hex::encode_upper(pk_as_bls.as_bytes());
+
+        return (BLSSecretKey(sk),BLSPublicKey(pk))
+    }
+    pub fn from_seed(seed: [u8;64]) -> (BLSSecretKey,BLSPublicKey) {
+        let sk_as_bls = bls_signatures::PrivateKey::new(seed);
         let pk_as_bls = sk_as_bls.public_key();
         
         let sk = hex::encode_upper(sk_as_bls.as_bytes());
@@ -87,6 +98,11 @@ impl BLSPublicKey {
 }
 
 impl BLSSecretKey {
+    pub fn from_seed(seed: [u8;64]) -> Self {
+        let sk_as_bls = bls_signatures::PrivateKey::new(seed);
+        let sk = hex::encode_upper(sk_as_bls.as_bytes());
+        Self(sk)
+    }
     pub fn from_bytes(bytes: &[u8]) -> Self {
         return Self(hex::encode_upper(bytes))
     }

@@ -1,7 +1,7 @@
 [package]
 name = "libsumatracrypt-rs"
 authors = ["silene0259"]
-version = "0.5.0"
+version = "0.6.0"
 description = "A Rust Library For Cryptography"
 keywords = ["crypto","cryptography","encryption","digest","signature"]
 categories = ["cryptography"]
@@ -65,6 +65,9 @@ pqcrypto-falcon = { version= "0.4.0", optional=true}
 pqc_kyber = {version = "0.7.1", features = ["kyber1024", "zeroize"]}
 #safe_pqc_kyber = {version = "0.6.3", features=["kyber1024"]}
 chacha20poly1305 = "0.10.1"
+
+# BIP39
+bip39 = {version = "2.1.0", features=["zeroize","all-languages"]}
 
 # Errors
 thiserror = "2.0.0"

@@ -1,3 +1,11 @@
+/// # Schnorr Over Curve25519 Ristresto
+/// 
+/// This module contains Schnorr Signatures over Curve25519.
+/// 
+/// ## TODO
+/// 
+/// - Add BIP39
+
 use schnorrkel::*;
 use new_rand::{Rng, rngs::OsRng};
 use hex::*;
@@ -13,13 +21,13 @@ pub const CTX_DEFAULT: &[u8] = b"sumatracrypt";
 pub struct SumatraSchnorrAPI;
 
 /// Schnorr Public Key (encoded in base32)
-#[derive(Debug,Clone,PartialEq,PartialOrd,Hash)]
+#[derive(Debug,Clone,PartialEq,PartialOrd,Hash,Zeroize,ZeroizeOnDrop)]
 pub struct SchnorrPublicKey(String);
 /// Schnorr Secret Key (encoded in base32)
-#[derive(Clone,PartialEq,PartialOrd,Hash)]
+#[derive(Clone,PartialEq,PartialOrd,Hash,Zeroize,ZeroizeOnDrop)]
 pub struct SchnorrSecretKey(String);
 
-#[derive(Debug,Clone,PartialEq,PartialOrd,Hash)]
+#[derive(Debug,Clone,PartialEq,PartialOrd,Hash,Zeroize,ZeroizeOnDrop)]
 pub struct SchnorrSignature(String);
 
 impl SchnorrPublicKey {
