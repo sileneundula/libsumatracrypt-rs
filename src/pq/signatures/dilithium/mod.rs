@@ -45,6 +45,9 @@ impl Dilithium3SecretKey {
         let bytes = self.to_bytes();
         return SecretKey::from_bytes(&bytes).expect("Failed To Decode Falcon1024 From Bytes")
     }
+    pub fn to_string(&self) -> String {
+        self.0.to_string()
+    }
 }
 
 impl Dilithium3PublicKey {
@@ -62,6 +65,9 @@ impl Dilithium3PublicKey {
     pub fn verify<T: AsRef<[u8]>>(&self, sig: Dilithium3Signature, msg: T) -> bool {
             let pk = self.to_pqcrtop();
             return verify_detached_signature(&sig.to_pqcrtop(), msg.as_ref(), &pk).is_ok()
+    }
+    pub fn to_string(&self) -> String {
+        self.0.to_string()
     }
 }
 
@@ -83,5 +89,8 @@ impl Dilithium3Signature {
     pub fn from_bs58<T: AsRef<str>>(sig: T) -> Self {
         let bytes = bs58::decode(sig.as_ref()).into_vec().expect("Failed To Convert From Base58");
         Self(hex::encode_upper(bytes))
+    }
+    pub fn to_string(&self) -> String {
+        self.0.to_string()
     }
 }

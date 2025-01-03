@@ -59,6 +59,9 @@ impl Falcon1024SecretKey {
         let signature = falcon1024::detached_sign(msg.as_ref(), &sk);
         return Falcon1024Signature(hex::encode_upper(signature.as_bytes()));
     }
+    pub fn to_string(&self) -> String {
+        self.0.to_string()
+    }
 }
 
 impl Falcon1024PublicKey {
@@ -73,6 +76,9 @@ impl Falcon1024PublicKey {
     pub fn verify<T: AsRef<[u8]>>(&self, sig: Falcon1024Signature, msg: T) -> bool {
         let pk = self.to_pqcrtop();
         return falcon1024::verify_detached_signature(&sig.to_pqcrtop(), msg.as_ref(), &pk).is_ok()
+    }
+    pub fn to_string(&self) -> String {
+        self.0.to_string()
     }
 }
 
@@ -91,5 +97,8 @@ impl Falcon1024Signature {
     pub fn from_bs58<T: AsRef<str>>(sig: T) -> Self {
         let bytes = bs58::decode(sig.as_ref()).into_vec().expect("Failed To Convert From Base58");
         Self(hex::encode_upper(bytes))
+    }
+    pub fn to_string(&self) -> String {
+        self.0.to_string()
     }
 }
