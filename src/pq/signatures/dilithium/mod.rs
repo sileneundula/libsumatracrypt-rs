@@ -48,6 +48,9 @@ impl Dilithium3SecretKey {
     pub fn to_string(&self) -> String {
         self.0.to_string()
     }
+    pub fn from_str<T: AsRef<str>>(s: T) -> Self {
+        Self(s.as_ref().to_string())
+    }
 }
 
 impl Dilithium3PublicKey {
@@ -68,6 +71,9 @@ impl Dilithium3PublicKey {
     }
     pub fn to_string(&self) -> String {
         self.0.to_string()
+    }
+    pub fn from_str<T: AsRef<str>>(s: T) -> Self {
+        Self(s.as_ref().to_string())
     }
 }
 
@@ -92,5 +98,8 @@ impl Dilithium3Signature {
     }
     pub fn to_string(&self) -> String {
         self.0.to_string()
+    }
+    pub fn from_str<T: AsRef<str>>(s: T) -> Self {
+        return Self(s.as_ref().to_string())
     }
 }
