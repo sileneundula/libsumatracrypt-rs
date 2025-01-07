@@ -2,13 +2,22 @@ use pqc_kyber::*;
 use rand::rngs::OsRng;
 use new_rand::*;
 use hex::*;
+use zeroize::*;
+use serde::{Serialize,Deserialize};
 
 pub struct SumatraKyber1024;
 
+#[derive(Zeroize,ZeroizeOnDrop,Clone,Serialize,Deserialize)]
 pub struct Kyber1024PublicKey(String);
+
+#[derive(Zeroize,ZeroizeOnDrop,Clone,Serialize,Deserialize)]
 pub struct Kyber1024SecretKey(String);
 
+#[derive(Zeroize,ZeroizeOnDrop,Clone,Serialize,Deserialize)]
+
 pub struct Kyber1024CipherText(String);
+
+#[derive(Zeroize,ZeroizeOnDrop,Clone,Serialize,Deserialize)]
 
 pub struct Kyber1024SharedSecret(String);
 

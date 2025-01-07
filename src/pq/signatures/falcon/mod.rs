@@ -46,21 +46,24 @@ impl SumatraFalcon1024 {
 }
 
 impl Falcon1024SecretKey {
-    pub fn to_pqcrtop(&self) -> falcon1024::SecretKey {
-        let bytes = self.to_bytes();
-        return falcon1024::SecretKey::from_bytes(&bytes).expect("Failed To Decode Falcon1024 From Bytes")
-    }
-    pub fn to_bytes(&self) -> Vec<u8> {
-        let bytes = hex::decode(&self.0).expect("Failed To Decode");
-        return bytes
-    }
     pub fn sign<T: AsRef<[u8]>>(&self, msg: T) -> Falcon1024Signature {
         let sk = self.to_pqcrtop();
         let signature = falcon1024::detached_sign(msg.as_ref(), &sk);
         return Falcon1024Signature(hex::encode_upper(signature.as_bytes()));
     }
+    pub fn to_bytes(&self) -> Vec<u8> {
+        let bytes = hex::decode(&self.0).expect("Failed To Decode");
+        return bytes
+    }
+    pub fn to_pqcrtop(&self) -> falcon1024::SecretKey {
+        let bytes = self.to_bytes();
+        return falcon1024::SecretKey::from_bytes(&bytes).expect("Failed To Decode Falcon1024 From Bytes")
+    }
     pub fn to_string(&self) -> String {
         self.0.to_string()
+    }
+    pub fn from_hex_str<T: AsRef<str>>(s: T) -> Self {
+        Self(s.as_ref().to_string())
     }
 }
 
@@ -79,6 +82,9 @@ impl Falcon1024PublicKey {
     }
     pub fn to_string(&self) -> String {
         self.0.to_string()
+    }
+    pub fn from_hex_str<T: AsRef<str>>(s: T) -> Self {
+        return Self(s.as_ref().to_string())
     }
 }
 
@@ -100,5 +106,8 @@ impl Falcon1024Signature {
     }
     pub fn to_string(&self) -> String {
         self.0.to_string()
+    }
+    pub fn from_hex_str<T: AsRef<str>>(sig: T) -> Self {
+        return Self(sig.as_ref().to_string())
     }
 }
