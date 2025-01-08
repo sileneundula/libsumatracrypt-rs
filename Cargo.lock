@@ -813,6 +813,7 @@ dependencies = [
  "pqc_kyber",
  "pqcrypto-dilithium",
  "pqcrypto-falcon",
+ "pqcrypto-mldsa",
  "pqcrypto-sphincsplus",
  "pqcrypto-traits",
  "rand 0.7.3",
@@ -908,6 +909,12 @@ checksum = "81fec4625e73cf41ef4bb6846cafa6d44736525f442ba45e407c4a000a13996f"
 dependencies = [
  "group",
 ]
+
+[[package]]
+name = "paste"
+version = "1.0.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
 
 [[package]]
 name = "pem-rfc7468"
@@ -1013,6 +1020,20 @@ dependencies = [
  "dunce",
  "getrandom 0.2.15",
  "libc",
+]
+
+[[package]]
+name = "pqcrypto-mldsa"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5439d511d79dcacbc91a11e9e78013aec955e399669bfae3955442d2f724b140"
+dependencies = [
+ "cc",
+ "glob",
+ "libc",
+ "paste",
+ "pqcrypto-internals",
+ "pqcrypto-traits",
 ]
 
 [[package]]

@@ -61,6 +61,7 @@ pqcrypto-traits = { version = "0.3.5", optional=true}
 pqcrypto-sphincsplus = { version = "0.7.0", optional=true}
 pqcrypto-dilithium = {version= "0.5.0", optional=true}
 pqcrypto-falcon = { version= "0.4.0", optional=true}
+pqcrypto-mldsa = { version="0.1.0", optional=true}
 
 pqc_kyber = {version = "0.7.1", features = ["kyber1024", "zeroize"]}
 #safe_pqc_kyber = {version = "0.6.3", features=["kyber1024"]}
@@ -79,4 +80,4 @@ digests = ["blake3","blake2-rfc","sha2","tiny-keccak","sha1"]
 signatures = ["schnorrkel","ed25519-dalek","ed448-goldilocks-plus"]
 encryption = ["rsa","ecies-ed25519"]
 dh = ["x448"]
-pq = ["pqcrypto-traits","pqcrypto-dilithium","pqcrypto-falcon","pqcrypto-traits"]
+pq = ["pqcrypto-traits","pqcrypto-dilithium","pqcrypto-falcon","pqcrypto-traits","pqcrypto-sphincsplus","pqcrypto-mldsa"]
