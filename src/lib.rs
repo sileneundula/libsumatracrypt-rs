@@ -20,8 +20,16 @@ pub mod dh;
 #[cfg(feature = "pq")]
 pub mod pq;
 
+/// Symmetric Encryption (CHACHA20,AES)
 pub mod sym_encryption;
 
+/// Errors
 pub mod errors;
 
+/// BIP39
 pub mod bip39;
+
+/// Utilities (A simple interface for encrypting data)
+pub mod utils;
+
+pub mod argon2;
