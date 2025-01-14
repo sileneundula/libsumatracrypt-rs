@@ -11,16 +11,26 @@ pub enum SumatraCryptErrors {
     InvalidSignature {
         ctx: SumatraCryptContext,
     },
+
+    #[error("Invalid Signing on {:?}", ctx)]
+    InvalidSigning {
+        ctx: SumatraCryptContext,
+    },
     
     // # Encoding/Decoding
     #[error("Invalid Encoding {:?}", ctx)]
     EncodingError {
-        ctx: SumatraCryptEncoding,
+        ctx: SumatraCryptContext,
     },
     #[error("Invalid Encoding {:?}", ctx)]
     DecodingError {
-        ctx: SumatraCryptEncoding,
+        ctx: SumatraCryptContext,
     },
+
+    #[error("Verification Failed For {:?}", ctx)]
+    VerificationFailed {
+        ctx: SumatraCryptContext,
+    }
 }
 
 #[derive(Debug)]

@@ -19,12 +19,12 @@ mod tests {
     #[test]
     fn ed25519_sign_and_verify() {
         let sk = SumatraED25519::new();
-        let vk = sk.to_public_key();
+        let vk = sk.to_public_key().unwrap();
         let message = "This is a message promoting sumatra";
 
         let signature = sk.sign(message);
 
-        let is_valid_signature = vk.verify(message, signature);
+        let is_valid_signature = vk.verify(message, signature.unwrap()).unwrap();
 
         assert!(is_valid_signature);
     }
@@ -32,13 +32,13 @@ mod tests {
     #[test]
     fn ed25519_sign_and_verify_invald_msg() {
         let sk = SumatraED25519::new();
-        let vk = sk.to_public_key();
+        let vk = sk.to_public_key().unwrap();
         let message = "This is a message promoting sumatra";
         let message_invalid = "This message is invalid for the given signature";
 
         let signature = sk.sign(message);
 
-        let is_valid_signature = vk.verify(message_invalid, signature);
+        let is_valid_signature = vk.verify(message_invalid, signature.unwrap()).unwrap();
 
         assert_eq!(is_valid_signature,false);
     }

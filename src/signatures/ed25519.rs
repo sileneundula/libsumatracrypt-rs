@@ -12,6 +12,8 @@
 
 use crate::csprng::SumatraCSPRNG;
 
+
+
 use bip39::Language;
 use serde::{Serialize,Deserialize};
 
@@ -29,6 +31,8 @@ use zeroize::*;
 
 // Built-In Error-Checking
 use crate::errors::SumatraCryptErrors;
+use crate::errors::SumatraCryptEncoding;
+use crate::errors::SumatraCryptContext;
 
 /// # SumatraED25519 Struct
 /// 
@@ -67,22 +71,22 @@ impl SumatraED25519 {
         return ED25519SecretKey(hex::encode_upper(sk.as_bytes()));
     }
     /// Verifies an ED25519 Digital Signature using bytes
-    pub fn verify<T: AsRef<[u8]>>(pk: ED25519PublicKey, bytes: T, signature: ED25519Signature) -> bool {
+    pub fn verify<T: AsRef<[u8]>>(pk: ED25519PublicKey, bytes: T, signature: ED25519Signature) -> Result<bool,SumatraCryptErrors> {
         // Verifying Key
-        let vk = pk.decode_from_hex();
+        let vk = pk.decode_from_hex()?;
         
         // Signature
-        let sig = signature.decode_from_hex();
+        let sig = signature.decode_from_hex()?;
 
         // Verify Strictly The ED25519 Signature
         let is_valid = vk.verify_strict(bytes.as_ref(), &sig);
 
         // Return Result
         if is_valid.is_ok() {
-            return true
+            return Ok(true)
         }
         else {
-            return false
+            return Ok(false)
         }
     }
 }
@@ -103,26 +107,38 @@ impl ED25519SecretKey {
     pub fn from_str<T: AsRef<str>>(pk_hex: T) -> Self {
         return Self(pk_hex.as_ref().to_owned())
     }
-    pub fn sign<T: AsRef<[u8]>>(&self, bytes: T) -> ED25519Signature {
-        let signingkey = self.decode_from_hex();
+    pub fn sign<T: AsRef<[u8]>>(&self, bytes: T) -> Result<ED25519Signature,SumatraCryptErrors> {
+        let signingkey = self.decode_from_hex()?;
 
-        let sig = signingkey.try_sign(bytes.as_ref()).expect("Failed To Sign Message Using ED25519");
+        let sig = signingkey.try_sign(bytes.as_ref());
 
-        return ED25519Signature(hex::encode_upper(sig.to_bytes()))
-    }
-    pub fn decode_from_hex(&self) -> ed25519_dalek::SigningKey {
-        let mut bytes_array: [u8;32] = [0u8;32];
-        
-        let bytes = hex::decode(&self.0).expect("Failed To Decode ED25519 From Secret Key");
-
-        for i in 0..bytes.len() {
-            bytes_array[i] = bytes[i];
+        if sig.is_err() {
+            return Err(SumatraCryptErrors::InvalidSigning { ctx: crate::errors::SumatraCryptContext::Signature_ED25519 })
         }
 
-        return SigningKey::from_bytes(&bytes_array)
+        return Ok(ED25519Signature(hex::encode_upper(sig.unwrap().to_bytes())))
     }
-    pub fn to_public_key(&self) -> ED25519PublicKey {
-        return ED25519PublicKey(hex::encode_upper(self.decode_from_hex().verifying_key().as_bytes()));
+    pub fn decode_from_hex(&self) -> Result<ed25519_dalek::SigningKey,SumatraCryptErrors> {
+        let mut bytes_array: [u8;32] = [0u8;32];
+        
+        let bytes = hex::decode(&self.0);
+
+        if bytes.is_err() {
+            return Err(SumatraCryptErrors::DecodingError { ctx: SumatraCryptContext::Signature_ED25519})
+        }
+
+        let unwrapped_bytes = bytes.unwrap();
+
+        for i in 0..unwrapped_bytes.len() {
+            bytes_array[i] = unwrapped_bytes[i];
+        }
+
+        return Ok(SigningKey::from_bytes(&bytes_array))
+    }
+    pub fn to_public_key(&self) -> Result<ED25519PublicKey,SumatraCryptErrors> {
+        let key = self.decode_from_hex()?;
+
+        return Ok(ED25519PublicKey(hex::encode_upper(key.verifying_key().as_bytes())));
     }
     // Dangerous
     pub fn to_string(&self) -> String {
@@ -138,30 +154,40 @@ impl ED25519PublicKey {
     pub fn new<T: AsRef<str>>(pk_hex: T) -> Self {
         return Self(pk_hex.as_ref().to_string())
     }
-    pub fn verify<T: AsRef<[u8]>>(&self, bytes: T, signature: ED25519Signature) -> bool {
-        let vk = self.decode_from_hex();
-        let sig = signature.decode_from_hex();
+    pub fn verify<T: AsRef<[u8]>>(&self, bytes: T, signature: ED25519Signature) -> Result<bool,SumatraCryptErrors> {
+        let vk = self.decode_from_hex()?;
+        let sig = signature.decode_from_hex()?;
         let is_valid = vk.verify_strict(bytes.as_ref(), &sig);
 
         if is_valid.is_ok() {
-            return true
+            return Ok(true)
         }
         else {
-            return false
+            return Ok(false)
         }
     }
-    pub fn decode_from_hex(&self) -> VerifyingKey {
+    pub fn decode_from_hex(&self) -> Result<VerifyingKey,SumatraCryptErrors> {
         let mut bytes_array: [u8;32] = [0u8;32];
         
-        let bytes = hex::decode(&self.0).expect("Failed To Decode");
+        let bytes = hex::decode(&self.0);
 
-        for i in 0..bytes.len() {
-            bytes_array[i] = bytes[i];
+        if bytes.is_err() {
+            return Err(SumatraCryptErrors::DecodingError { ctx: SumatraCryptContext::Signature_ED25519 })
         }
 
-        let vk = ed25519_dalek::VerifyingKey::from_bytes(&bytes_array).expect("Failed To Get Verifying Key From Bytes");
+        let unwrapped_bytes = bytes.unwrap();
 
-        return vk
+        for i in 0..unwrapped_bytes.len() {
+            bytes_array[i] = unwrapped_bytes[i];
+        }
+
+        let vk = ed25519_dalek::VerifyingKey::from_bytes(&bytes_array);
+
+        if vk.is_err() {
+            return Err(SumatraCryptErrors::DecodingError { ctx: SumatraCryptContext::Signature_ED25519 })
+        }
+
+        return Ok(vk.unwrap())
     }
     pub fn to_string(&self) -> String {
         return self.0.clone()
@@ -178,33 +204,47 @@ impl ED25519PublicKey {
 }
 
 impl ED25519Signature {
-    pub fn decode_from_hex(&self) -> ed25519_dalek::Signature {
+    pub fn decode_from_hex(&self) -> Result<ed25519_dalek::Signature,SumatraCryptErrors> {
         let mut bytes_array: [u8;64] = [0u8;64];
 
-        let bytes = hex::decode(&self.0).expect("Failed To Decode Hex");
+        let bytes = hex::decode(&self.0);
 
-        for i in 0..bytes.len() {
-            bytes_array[i] = bytes[i];
+        if bytes.is_err() {
+            return Err(SumatraCryptErrors::DecodingError { ctx: SumatraCryptContext::Signature_ED25519} )
         }
 
-        return ed25519_dalek::Signature::from_bytes(&bytes_array)
-    }
-    pub fn to_bytes(&self) -> Vec<u8> {
-        let bytes = hex::decode(&self.0).expect("Failed To Decode From Hex");
+        let unwrapped_bytes = bytes.unwrap();
 
-        return bytes
+        for i in 0..unwrapped_bytes.len() {
+            bytes_array[i] = unwrapped_bytes[i];
+        }
+
+        return Ok(ed25519_dalek::Signature::from_bytes(&bytes_array))
+    }
+    pub fn to_bytes(&self) -> Result<Vec<u8>,SumatraCryptErrors> {
+        let bytes = hex::decode(&self.0);
+
+        if bytes.is_err() {
+            return Err(SumatraCryptErrors::DecodingError { ctx: SumatraCryptContext::Signature_ED25519 })
+        }
+
+        return Ok(bytes.unwrap())
     }
     pub fn to_string(&self) -> String {
         self.0.clone()
     }
-    pub fn to_base58(&self) -> String {
-        let bytes = self.to_bytes();
+    pub fn to_base58(&self) -> Result<String,SumatraCryptErrors> {
+        let bytes = self.to_bytes()?;
         let s = bs58::encode(bytes).into_string();
 
-        return s
+        return Ok(s)
     }
-    pub fn from_base58<T: AsRef<str>>(sig_as_bs58: T) -> Self {
-        let s: Vec<u8> = bs58::decode(sig_as_bs58.as_ref()).into_vec().expect("Failed TO Convert To Base58");
-        Self(hex::encode_upper(s))
+    pub fn from_base58<T: AsRef<str>>(sig_as_bs58: T) -> Result<Self,SumatraCryptErrors> {
+        let s = bs58::decode(sig_as_bs58.as_ref()).into_vec();
+
+        if s.is_err() {
+            return Err(SumatraCryptErrors::DecodingError { ctx: SumatraCryptContext::Signature_ED25519 })
+        }
+        Ok(Self(hex::encode_upper(s.unwrap())))
     }
 }

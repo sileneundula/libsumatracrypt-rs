@@ -4,6 +4,7 @@
 
 - Added Argon2id KDF
 - Added CSPRNG from CHACHA20 Seed for {32,48,64} bytes of randomness
+- Added Errors to ED25519
 
 ## 0.6.0
 

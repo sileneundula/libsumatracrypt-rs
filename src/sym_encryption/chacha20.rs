@@ -8,6 +8,10 @@ use chacha20poly1305::{
 pub struct ChaCha20Encrypt;
 pub struct ChaCha20Decrypt;
 
+
+pub struct EncryptionKey(String);
+pub struct CipherText(String);
+
 impl ChaCha20Encrypt {
     pub fn new<T: AsRef<[u8]>>(key: T) {
         let nonce = chacha20poly1305::XChaCha20Poly1305::generate_nonce(&mut OsRng);
