@@ -32,19 +32,14 @@ pub struct SchnorrSignature(String);
 
 impl SchnorrPublicKey {
     pub fn new<S: AsRef<str>>(pk: S) -> Self {
-        if pk.as_ref().len() == 52 {
-            return Self(pk.as_ref().to_owned())
-        }
-        else {
-            panic!("Not Length 52");
-        }
+        return Self(pk.as_ref().to_owned())
     }
     pub fn generate() -> (SchnorrPublicKey,SchnorrSecretKey) {
         let keypair: Keypair = Keypair::generate_with(OsRng);
-        let bs32_public = base32::encode(base32::Alphabet::Rfc4648 { padding: false }, &keypair.public.to_bytes());
-        let bs32_secret = base32::encode(base32::Alphabet::Rfc4648 { padding: false }, &keypair.secret.to_bytes());
+        let hex_public = hex::encode_upper(&keypair.public.to_bytes());
+        let hex_secret = hex::encode_upper(&keypair.secret.to_bytes());
 
-        return (SchnorrPublicKey(bs32_public),SchnorrSecretKey(bs32_secret))
+        return (SchnorrPublicKey(hex_public),SchnorrSecretKey(hex_secret))
     }
     pub fn public_key(&self) -> String {
         return self.0.clone()
@@ -64,8 +59,8 @@ impl SchnorrPublicKey {
         return self.verify_with_context(CTX_DEFAULT,msg.as_ref(),signature)
     }
     pub fn to_bytes(&self) -> Vec<u8> {
-        let bs32_decoded_as_bytes = base32::decode(base32::Alphabet::Rfc4648 { padding: false },&self.0).unwrap();
-        return bs32_decoded_as_bytes
+        let bytes = hex::decode(&self.0).unwrap();
+        return bytes
     }
     pub fn to_hex(&self) -> String {
         let bytes = self.to_bytes();
